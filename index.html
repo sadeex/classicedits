@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Classic Creative Co – Graphic & Web Design</title>
-  <link rel="icon" type="image/svg+xml" id="favicon-link" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23111'/><text y='68' x='50' text-anchor='middle' font-size='44' font-family='Georgia' fill='%23C9A84C'>C</text></svg>"/>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -55,7 +54,6 @@
       padding: 12px 20px;
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo img { height: 44px; width: 44px; object-fit: contain; border-radius: 50%; border: 2px solid var(--gold); }
     .nav-logo-text { font-size: 1.1rem; font-weight: 700; }
     .nav-links { display: flex; gap: 28px; align-items: center; }
     .nav-links a {
@@ -96,12 +94,6 @@
     #hero::before {
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
-    }
-    .hero-logo {
-      width: 130px; height: 130px; object-fit: contain;
-      border-radius: 50%; border: 3px solid var(--gold);
-      box-shadow: 0 0 40px rgba(201,168,76,0.35);
-      margin: 0 auto 24px; display: block;
     }
     .hero-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; }
     .hero-sub { font-size: clamp(0.95rem, 2vw, 1.2rem); color: #aaa; margin: 14px auto 32px; max-width: 560px; }
@@ -218,17 +210,8 @@
     /* ABOUT */
     #about { padding: 80px 20px; background: var(--dark2); }
     .about-inner {
-      max-width: 900px; margin: auto;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
-    }
-    @media(max-width:640px){ .about-inner { grid-template-columns: 1fr; } }
-    .about-img-wrap {
-      position: relative;
-    }
-    .about-logo {
-      width: 100%; max-width: 300px; margin: auto; display: block;
-      border-radius: 20px; border: 2px solid rgba(201,168,76,0.3);
-      box-shadow: 0 8px 40px rgba(201,168,76,0.2);
+      max-width: 700px; margin: auto;
+      display: block; text-align: center;
     }
     .about-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 16px; }
     .about-text { color: #aaa; font-size: 0.95rem; line-height: 1.8; margin-bottom: 12px; }
@@ -255,7 +238,6 @@
       background: var(--dark2); border-top: 1px solid rgba(201,168,76,0.15);
       padding: 36px 20px; text-align: center;
     }
-    .footer-logo { height: 48px; margin: 0 auto 12px; display: block; }
     .footer-text { color: #666; font-size: 0.85rem; }
 
     /* ADMIN PANEL */
@@ -331,7 +313,6 @@
       background: var(--dark3); border: 1px solid rgba(201,168,76,0.3);
       border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 380px; text-align: center;
     }
-    .login-logo { height: 70px; margin: 0 auto 16px; display: block; }
     .login-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
     .login-sub { font-size: 0.82rem; color: #888; margin-bottom: 24px; }
     .login-error { color: #f87171; font-size: 0.82rem; margin-bottom: 12px; display: none; }
@@ -432,7 +413,6 @@
 <nav id="navbar">
   <div class="nav-inner">
     <a href="#" class="nav-logo" onclick="showHome(event)">
-      <img id="nav-logo-img" src="" alt="Classic Creative Co"/>
       <span class="nav-logo-text gold-text">Classic Creative Co</span>
     </a>
     <div class="nav-links">
@@ -467,7 +447,6 @@
   <!-- HERO -->
   <section id="hero">
     <div style="position:relative;z-index:1;">
-      <img id="hero-logo" src="" alt="Classic Creative Co Logo" class="hero-logo"/>
       <h1 class="hero-title gold-text">Classic Creative Co</h1>
       <p class="hero-sub">Professional Graphic Design & Web Design services that elevate your brand to new heights.</p>
       <a href="#portfolio" class="btn-gold">Explore Our Work</a>
@@ -548,9 +527,6 @@
     <div class="section-title gold-text">About Us</div>
     <div class="gold-divider"></div>
     <div class="about-inner">
-      <div class="about-img-wrap">
-        <img id="about-logo" src="" alt="Classic Creative Co" class="about-logo"/>
-      </div>
       <div>
         <h3 class="about-title">Creativity <span class="gold-text">Meets</span> Excellence</h3>
         <p class="about-text">Classic Creative Co is a premier graphic design and web design studio dedicated to helping businesses stand out in a crowded digital world. We combine artistic vision with strategic thinking to deliver designs that don't just look great—they work.</p>
@@ -570,7 +546,7 @@
         <div class="contact-card">
           <div class="contact-icon">✉️</div>
           <div class="contact-label">Email</div>
-          <div class="contact-val">sadithas59@gmail.com</div>
+          <div class="contact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="621103060b160a0311575b22050f030b0e4c010d0f">[email&#160;protected]</a></div>
         </div>
         <div class="contact-card">
           <div class="contact-icon">🌍</div>
@@ -588,7 +564,6 @@
 
   <!-- FOOTER -->
   <footer>
-    <img id="footer-logo" src="" alt="Classic Creative Co" class="footer-logo"/>
     <p class="gold-text" style="font-weight:700;margin-bottom:6px;">Classic Creative Co</p>
     <p class="footer-text">Graphic Design & Web Design Studio · Sri Lanka</p>
     <p class="footer-text" style="margin-top:8px;">© 2025 Classic Creative Co. All rights reserved.</p>
@@ -615,7 +590,6 @@
 <!-- LOGIN OVERLAY -->
 <div id="login-overlay">
   <div class="login-modal">
-    <img id="login-logo" src="" alt="Logo" class="login-logo"/>
     <h2 class="login-title gold-text">Admin Login</h2>
     <p class="login-sub">Classic Creative Co · Secure Access</p>
     <div class="login-error" id="login-error">Invalid credentials. Please try again.</div>
@@ -702,7 +676,7 @@
 <!-- TOAST -->
 <div id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================================
 // FIREBASE CONFIG
 // ============================================================
@@ -718,24 +692,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
+const POSTS_COLLECTION = 'site_posts'; // Clean collection: old existing posts in "posts" will not appear.
 try { firebase.analytics(); } catch(e) {}
 
-// Set logos – using a golden CC brand mark that matches the brand
+// Brand logo removed per request.
 function setLogos() {
-  // SVG fallback logo matching Classic Creative Co brand (gold, elegant)
-  const logoSvg = `data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" rx="100" fill="%23111"/><circle cx="100" cy="100" r="90" fill="none" stroke="%23C9A84C" stroke-width="3"/><text x="100" y="88" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="%23C9A84C">CLASSIC</text><text x="100" y="118" text-anchor="middle" font-family="Georgia,serif" font-size="20" letter-spacing="4" fill="%23C9A84C">CREATIVE</text><text x="100" y="145" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="%23C9A84C">Co.</text></svg>`;
-  // Primary logo source – user uploaded (hosted via imgur or fallback svg)
-  // Since the user physically uploaded the PNG logo, we store it as embedded SVG brand mark
-  const LOGO_SRC = logoSvg;
-  const imgs = ['nav-logo-img','hero-logo','about-logo','footer-logo','login-logo'];
-  imgs.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) { el.src = LOGO_SRC; }
-  });
-  // Favicon
-  let fav = document.getElementById('favicon-link');
-  if(!fav){ fav = document.createElement('link'); fav.rel='icon'; fav.id='favicon-link'; document.head.appendChild(fav); }
-  fav.href = logoSvg;
+  // No logo images or branded favicon are applied.
 }
 
 // ============================================================
@@ -804,7 +766,7 @@ function previewFile(input) {
 
 async function uploadFileToStorage(file) {
   return new Promise((resolve, reject) => {
-    const ref = storage.ref('posts/' + Date.now() + '_' + file.name);
+    const ref = storage.ref(POSTS_COLLECTION + '/' + Date.now() + '_' + file.name);
     const task = ref.put(file);
     document.getElementById('upload-progress-wrap').style.display = 'block';
     task.on('state_changed', snap => {
@@ -849,11 +811,11 @@ async function submitPost() {
 
   try {
     if(editPostId) {
-      await db.collection('posts').doc(editPostId).update(postData);
+      await db.collection(POSTS_COLLECTION).doc(editPostId).update(postData);
       showToast('Post updated! ✅', 'success');
       editPostId = null;
     } else {
-      const docRef = await db.collection('posts').add(postData);
+      const docRef = await db.collection(POSTS_COLLECTION).add(postData);
       const postUrl = window.location.origin + window.location.pathname + '?post=' + docRef.id;
       showToast('Post published! 🚀 URL: ' + postUrl, 'success');
       setTimeout(() => {
@@ -882,7 +844,7 @@ async function loadAdminPosts() {
   const list = document.getElementById('admin-posts-list');
   list.innerHTML = '<div class="spinner"></div>';
   try {
-    const snap = await db.collection('posts').orderBy('createdAt','desc').get();
+    const snap = await db.collection(POSTS_COLLECTION).orderBy('createdAt','desc').get();
     if(snap.empty) { list.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">No posts yet.</p>'; return; }
     list.innerHTML = '';
     snap.forEach(doc => {
@@ -909,7 +871,7 @@ async function deletePost(id, btn) {
   if(!confirm('Delete this post?')) return;
   btn.textContent = '...'; btn.disabled = true;
   try {
-    await db.collection('posts').doc(id).delete();
+    await db.collection(POSTS_COLLECTION).doc(id).delete();
     showToast('Post deleted.', 'success');
     loadAdminPosts(); loadPosts();
   } catch(e) { showToast('Delete failed: ' + e.message, 'error'); btn.textContent = 'Delete'; btn.disabled = false; }
@@ -917,7 +879,7 @@ async function deletePost(id, btn) {
 
 async function editPost(id) {
   try {
-    const doc = await db.collection('posts').doc(id).get();
+    const doc = await db.collection(POSTS_COLLECTION).doc(id).get();
     const d = doc.data();
     editPostId = id;
     document.getElementById('p-title').value = d.title || '';
@@ -943,7 +905,7 @@ async function loadPosts() {
   const grid = document.getElementById('posts-grid');
   grid.innerHTML = '<div class="spinner"></div>';
   try {
-    const snap = await db.collection('posts').orderBy('createdAt','desc').get();
+    const snap = await db.collection(POSTS_COLLECTION).orderBy('createdAt','desc').get();
     allPosts = [];
     const cats = new Set();
     snap.forEach(doc => {
@@ -1079,7 +1041,7 @@ async function checkDirectPostUrl() {
   const postId = params.get('post');
   if(postId) {
     try {
-      const doc = await db.collection('posts').doc(postId).get();
+      const doc = await db.collection(POSTS_COLLECTION).doc(postId).get();
       if(doc.exists) {
         const post = { id: doc.id, ...doc.data() };
         // Add to allPosts if not already there
@@ -1135,5 +1097,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a098bc1ebf0424d1',t:'MTc4MTA5ODI3MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
