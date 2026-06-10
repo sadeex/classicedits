@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Classic Creative Co – Graphic & Web Design</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs - HTML only, no npm needed -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
@@ -417,7 +418,7 @@
     </a>
     <div class="nav-links">
       <a href="#services">Services</a>
-      <a href="#portfolio">Portfolio</a>
+      <a href="#portfolio">Products</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </div>
@@ -427,7 +428,7 @@
   </div>
   <div class="mobile-menu" id="mobile-menu">
     <a href="#services" onclick="toggleMobile()">Services</a>
-    <a href="#portfolio" onclick="toggleMobile()">Portfolio</a>
+    <a href="#portfolio" onclick="toggleMobile()">Products</a>
     <a href="#about" onclick="toggleMobile()">About</a>
     <a href="#contact" onclick="toggleMobile()">Contact</a>
   </div>
@@ -449,7 +450,7 @@
     <div style="position:relative;z-index:1;">
       <h1 class="hero-title gold-text">Classic Creative Co</h1>
       <p class="hero-sub">Professional Graphic Design & Web Design services that elevate your brand to new heights.</p>
-      <a href="#portfolio" class="btn-gold">Explore Our Work</a>
+      <a href="#portfolio" class="btn-gold">Explore Products</a>
       <div class="hero-stats">
         <div class="stat">
           <div class="stat-num gold-text">150+</div>
@@ -505,9 +506,9 @@
 
   <!-- PORTFOLIO -->
   <section id="portfolio">
-    <div class="section-title gold-text">Our Portfolio</div>
+    <div class="section-title gold-text">Our Products</div>
     <div class="gold-divider"></div>
-    <p class="section-sub">Browse our latest projects and creative work</p>
+    <p class="section-sub">Browse our latest products and creative work</p>
     <div class="filter-bar" id="filter-bar">
       <button class="filter-btn active" onclick="filterPosts('all', this)">All</button>
     </div>
@@ -546,7 +547,7 @@
         <div class="contact-card">
           <div class="contact-icon">✉️</div>
           <div class="contact-label">Email</div>
-          <div class="contact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="621103060b160a0311575b22050f030b0e4c010d0f">[email&#160;protected]</a></div>
+          <div class="contact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="becddfdad7cad6dfcd8b87fed9d3dfd7d290ddd1d3">[email&#160;protected]</a></div>
         </div>
         <div class="contact-card">
           <div class="contact-icon">🌍</div>
@@ -573,7 +574,7 @@
 <!-- SINGLE POST VIEW -->
 <div id="post-view">
   <div class="post-view-inner">
-    <button class="post-view-back" onclick="closePostView()">&#8592; Back to Portfolio</button>
+    <button class="post-view-back" onclick="closePostView()">&#8592; Back to Products</button>
     <img id="pv-img" src="" alt="" class="post-view-img" style="display:none;"/>
     <div id="pv-img-placeholder" class="post-img-placeholder" style="border-radius:16px;margin-bottom:28px;display:none;font-size:4rem;">🎨</div>
     <div class="post-view-cat"><span id="pv-cat" class="post-cat"></span></div>
@@ -613,14 +614,14 @@
     <h2 class="admin-title gold-text">⚙️ Admin Panel</h2>
 
     <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchAdminTab('add', this)">➕ Add Post</button>
-      <button class="admin-tab" onclick="switchAdminTab('manage', this)">📋 Manage Posts</button>
+      <button class="admin-tab active" onclick="switchAdminTab('add', this)">➕ Add Product</button>
+      <button class="admin-tab" onclick="switchAdminTab('manage', this)">📋 Manage Products</button>
     </div>
 
     <!-- ADD POST TAB -->
     <div id="tab-add" class="tab-section active">
       <div class="form-group">
-        <label class="form-label">Post Title *</label>
+        <label class="form-label">Product Title *</label>
         <input type="text" class="form-input" id="p-title" placeholder="e.g. Logo Design Package"/>
       </div>
       <div class="form-group">
@@ -640,7 +641,7 @@
         <input type="text" class="form-input" id="p-order-link" placeholder="https://wa.me/94xxxxxxxxx or mailto:..."/>
       </div>
       <div class="form-group">
-        <label class="form-label">Post Image</label>
+        <label class="form-label">Product Image</label>
         <div class="img-tabs">
           <div class="img-tab active" id="tab-url" onclick="switchImgTab('url')">🔗 Image URL</div>
           <div class="img-tab" id="tab-upload" onclick="switchImgTab('upload')">📤 Upload File</div>
@@ -661,7 +662,7 @@
           <div id="file-preview" style="margin-top:10px;"></div>
         </div>
       </div>
-      <button class="btn-gold" style="width:100%;" onclick="submitPost()">Publish Post 🚀</button>
+      <button class="btn-gold" style="width:100%;" onclick="submitPost()">Publish Product 🚀</button>
     </div>
 
     <!-- MANAGE POSTS TAB -->
@@ -678,59 +679,84 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================================
-// FIREBASE CONFIG
+// FIREBASE CONFIG - HTML ONLY VERSION
 // ============================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyBRdukrD1dM5AJmbAh7JPT2yWsHdgzbvzw",
-  authDomain: "ssss-19e02.firebaseapp.com",
-  projectId: "ssss-19e02",
-  storageBucket: "ssss-19e02.firebasestorage.app",
-  messagingSenderId: "17505490718",
-  appId: "1:17505490718:web:505a11b64236129907db0f",
-  measurementId: "G-P4EY62HW01"
+  apiKey: "AIzaSyCoFlxGu97FqxdqPR5WXpyYpgXuP47TM5o",
+  authDomain: "sadeex-ea126.firebaseapp.com",
+  projectId: "sadeex-ea126",
+  storageBucket: "sadeex-ea126.firebasestorage.app",
+  messagingSenderId: "337468927784",
+  appId: "1:337468927784:web:c185e6841431f728986a1d",
+  measurementId: "G-XCQ1F4LP8L"
 };
+
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
-const POSTS_COLLECTION = 'site_posts'; // Clean collection: old existing posts in "posts" will not appear.
 try { firebase.analytics(); } catch(e) {}
 
-// Brand logo removed per request.
+const POSTS_COLLECTION = 'site_posts';
+let postsLoadedOnce = false;
+let postsLoadedResolve = null;
+let unsubscribePosts = null;
+
 function setLogos() {
-  // No logo images or branded favicon are applied.
+  // Brand logo removed per request.
+}
+
+function makePostId() {
+  return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
 }
 
 // ============================================================
-// ADMIN AUTH
+// ADMIN AUTH - FIREBASE EMAIL/PASSWORD LOGIN
 // ============================================================
-const ADMIN_USER = "sadithas59@gmail.com";
-const ADMIN_PASS = "Time?7@@";
 let isAdmin = false;
 
 function openAdminOrLogin() {
-  if(isAdmin) { openAdmin(); }
+  if(isAdmin || auth.currentUser) { openAdmin(); }
   else { document.getElementById('login-overlay').classList.add('open'); }
 }
 function closeLogin() { document.getElementById('login-overlay').classList.remove('open'); }
-function doLogin() {
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value;
+
+async function doLogin() {
+  const email = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
   const err = document.getElementById('login-error');
-  if(u === ADMIN_USER && p === ADMIN_PASS) {
-    isAdmin = true; err.style.display='none';
-    closeLogin(); openAdmin();
-  } else {
-    err.style.display='block';
-    document.getElementById('login-pass').value='';
+
+  err.style.display = 'none';
+  if(!email || !password) {
+    err.textContent = 'Please enter Firebase admin email and password.';
+    err.style.display = 'block';
+    return;
+  }
+
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    isAdmin = true;
+    err.style.display = 'none';
+    closeLogin();
+    openAdmin();
+  } catch(error) {
+    err.textContent = error.message || 'Login failed.';
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
   }
 }
+
+auth.onAuthStateChanged(user => {
+  isAdmin = !!user;
+});
 
 // ============================================================
 // ADMIN PANEL
 // ============================================================
 let currentImgTab = 'url';
-let uploadedImageUrl = '';
 let editPostId = null;
+let allPosts = [];
+let activeFilter = 'all';
 
 function openAdmin() {
   document.getElementById('admin-overlay').classList.add('open');
@@ -766,23 +792,35 @@ function previewFile(input) {
 
 async function uploadFileToStorage(file) {
   return new Promise((resolve, reject) => {
-    const ref = storage.ref(POSTS_COLLECTION + '/' + Date.now() + '_' + file.name);
+    if(!auth.currentUser) {
+      reject(new Error('Please login with Firebase admin account first.'));
+      return;
+    }
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const ref = storage.ref(POSTS_COLLECTION + '/' + Date.now() + '_' + safeName);
     const task = ref.put(file);
     document.getElementById('upload-progress-wrap').style.display = 'block';
     task.on('state_changed', snap => {
       const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
       document.getElementById('upload-progress-bar').style.width = pct + '%';
       document.getElementById('upload-progress-text').textContent = 'Uploading... ' + pct + '%';
-    }, reject, () => {
+    }, error => {
+      reject(error);
+    }, () => {
       task.snapshot.ref.getDownloadURL().then(url => {
         document.getElementById('upload-progress-text').textContent = 'Upload complete!';
         resolve(url);
-      });
+      }).catch(reject);
     });
   });
 }
 
 async function submitPost() {
+  if(!auth.currentUser) {
+    showToast('Please login with Firebase admin account first.', 'error');
+    return;
+  }
+
   const title = document.getElementById('p-title').value.trim();
   const cat = document.getElementById('p-cat').value.trim();
   const desc = document.getElementById('p-desc').value.trim();
@@ -802,31 +840,46 @@ async function submitPost() {
     }
   }
 
-  const price = priceRaw ? parseInt(priceRaw) : null;
-  const postData = {
-    title, category: cat, description: desc,
-    price, orderLink, imageUrl,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
+  const price = priceRaw ? parseInt(priceRaw, 10) : null;
 
   try {
     if(editPostId) {
-      await db.collection(POSTS_COLLECTION).doc(editPostId).update(postData);
-      showToast('Post updated! ✅', 'success');
+      const oldPost = allPosts.find(p => p.id === editPostId) || {};
+      await db.collection(POSTS_COLLECTION).doc(editPostId).update({
+        title,
+        category: cat,
+        description: desc,
+        price,
+        orderLink,
+        imageUrl: imageUrl || oldPost.imageUrl || '',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showToast('Product updated! ✅', 'success');
       editPostId = null;
     } else {
-      const docRef = await db.collection(POSTS_COLLECTION).add(postData);
-      const postUrl = window.location.origin + window.location.pathname + '?post=' + docRef.id;
-      showToast('Post published! 🚀 URL: ' + postUrl, 'success');
+      const docRef = await db.collection(POSTS_COLLECTION).add({
+        title,
+        category: cat,
+        description: desc,
+        price,
+        orderLink,
+        imageUrl,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: auth.currentUser.email || auth.currentUser.uid
+      });
+      const productUrl = window.location.origin + window.location.pathname + '?post=' + docRef.id;
+      showToast('Product added for everyone! ✅', 'success');
       setTimeout(() => {
-        if(confirm('Post published! Copy URL?\n\n' + postUrl)) {
-          navigator.clipboard.writeText(postUrl).catch(() => {});
+        if(confirm('Product added! Copy product URL?\n\n' + productUrl)) {
+          navigator.clipboard.writeText(productUrl).catch(() => {});
         }
       }, 500);
     }
     resetPostForm();
-    loadPosts();
-  } catch(e) { showToast('Error: ' + e.message, 'error'); }
+    loadAdminPosts();
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
 }
 
 function resetPostForm() {
@@ -834,89 +887,105 @@ function resetPostForm() {
     const el = document.getElementById(id);
     if(el) el.value = '';
   });
+  const fileInput = document.getElementById('p-img-file');
+  if(fileInput) fileInput.value = '';
   document.getElementById('file-preview').innerHTML = '';
   document.getElementById('upload-progress-wrap').style.display = 'none';
   document.getElementById('upload-progress-bar').style.width = '0%';
+  document.getElementById('upload-progress-text').textContent = '';
   editPostId = null;
 }
 
-async function loadAdminPosts() {
+function loadAdminPosts() {
   const list = document.getElementById('admin-posts-list');
-  list.innerHTML = '<div class="spinner"></div>';
-  try {
-    const snap = await db.collection(POSTS_COLLECTION).orderBy('createdAt','desc').get();
-    if(snap.empty) { list.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">No posts yet.</p>'; return; }
-    list.innerHTML = '';
-    snap.forEach(doc => {
-      const d = doc.data();
-      const item = document.createElement('div');
-      item.className = 'admin-post-item';
-      item.innerHTML = `
-        ${d.imageUrl
-          ? `<img src="${d.imageUrl}" class="admin-post-thumb" onerror="this.style.display='none'" alt=""/>`
-          : `<div style="width:56px;height:56px;background:#252525;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🎨</div>`}
-        <div class="admin-post-info">
-          <div class="admin-post-title">${escHtml(d.title)}</div>
-          <div class="admin-post-meta">${escHtml(d.category)} · ${d.price ? 'LKR ' + Number(d.price).toLocaleString() : 'Price on request'}</div>
-        </div>
-        <button class="btn-edit" onclick="editPost('${doc.id}')">Edit</button>
-        <button class="btn-delete" onclick="deletePost('${doc.id}', this)">Delete</button>
-      `;
-      list.appendChild(item);
-    });
-  } catch(e) { list.innerHTML = '<p style="color:#f87171;text-align:center;padding:20px;">Error loading posts.</p>'; }
+  if(!allPosts.length) {
+    list.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">No products yet.</p>';
+    return;
+  }
+  list.innerHTML = '';
+  allPosts.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'admin-post-item';
+    item.innerHTML = `
+      ${d.imageUrl
+        ? `<img src="${escHtml(d.imageUrl)}" class="admin-post-thumb" onerror="this.style.display='none'" alt=""/>`
+        : `<div style="width:56px;height:56px;background:#252525;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🎨</div>`}
+      <div class="admin-post-info">
+        <div class="admin-post-title">${escHtml(d.title)}</div>
+        <div class="admin-post-meta">${escHtml(d.category)} · ${d.price ? 'LKR ' + Number(d.price).toLocaleString() : 'Price on request'}</div>
+      </div>
+      <button class="btn-edit" onclick="editPost('${d.id}')">Edit</button>
+      <button class="btn-delete" onclick="deletePost('${d.id}', this)">Delete</button>
+    `;
+    list.appendChild(item);
+  });
 }
 
 async function deletePost(id, btn) {
-  if(!confirm('Delete this post?')) return;
+  if(!auth.currentUser) { showToast('Please login first.', 'error'); return; }
+  if(!confirm('Delete this product?')) return;
   btn.textContent = '...'; btn.disabled = true;
   try {
     await db.collection(POSTS_COLLECTION).doc(id).delete();
-    showToast('Post deleted.', 'success');
-    loadAdminPosts(); loadPosts();
-  } catch(e) { showToast('Delete failed: ' + e.message, 'error'); btn.textContent = 'Delete'; btn.disabled = false; }
+    showToast('Product deleted.', 'success');
+    loadAdminPosts();
+  } catch(e) {
+    showToast('Delete failed: ' + e.message, 'error');
+    btn.textContent = 'Delete'; btn.disabled = false;
+  }
 }
 
-async function editPost(id) {
-  try {
-    const doc = await db.collection(POSTS_COLLECTION).doc(id).get();
-    const d = doc.data();
-    editPostId = id;
-    document.getElementById('p-title').value = d.title || '';
-    document.getElementById('p-cat').value = d.category || '';
-    document.getElementById('p-desc').value = d.description || '';
-    document.getElementById('p-price').value = d.price || '';
-    document.getElementById('p-order-link').value = d.orderLink || '';
-    document.getElementById('p-img-url').value = d.imageUrl || '';
-    switchImgTab('url');
-    // Switch to add tab
-    document.querySelectorAll('.admin-tab')[0].click();
-    showToast('Editing post – make changes and click Publish.', '');
-  } catch(e) { showToast('Error loading post.', 'error'); }
+function editPost(id) {
+  const d = allPosts.find(p => p.id === id);
+  if(!d) { showToast('Product not found.', 'error'); return; }
+  editPostId = id;
+  document.getElementById('p-title').value = d.title || '';
+  document.getElementById('p-cat').value = d.category || '';
+  document.getElementById('p-desc').value = d.description || '';
+  document.getElementById('p-price').value = d.price || '';
+  document.getElementById('p-order-link').value = d.orderLink || '';
+  document.getElementById('p-img-url').value = d.imageUrl || '';
+  switchImgTab('url');
+  document.querySelectorAll('.admin-tab')[0].click();
+  showToast('Editing product – make changes and click Publish.', '');
 }
 
 // ============================================================
-// PUBLIC POSTS
+// PUBLIC PRODUCTS - EVERYONE CAN SEE FIREBASE PRODUCTS
 // ============================================================
-let allPosts = [];
-let activeFilter = 'all';
-
-async function loadPosts() {
+function loadPosts() {
   const grid = document.getElementById('posts-grid');
   grid.innerHTML = '<div class="spinner"></div>';
-  try {
-    const snap = await db.collection(POSTS_COLLECTION).orderBy('createdAt','desc').get();
-    allPosts = [];
-    const cats = new Set();
-    snap.forEach(doc => {
-      allPosts.push({ id: doc.id, ...doc.data() });
-      if(doc.data().category) cats.add(doc.data().category);
+
+  return new Promise(resolve => {
+    postsLoadedResolve = resolve;
+    if(unsubscribePosts) unsubscribePosts();
+
+    unsubscribePosts = db.collection(POSTS_COLLECTION).orderBy('createdAt','desc').onSnapshot(snapshot => {
+      allPosts = [];
+      const cats = new Set();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const post = { id: doc.id, ...data };
+        allPosts.push(post);
+        if(data.category) cats.add(data.category);
+      });
+      buildFilterBar(cats);
+      const filtered = activeFilter === 'all' ? allPosts : allPosts.filter(p => p.category === activeFilter);
+      renderPosts(filtered);
+      if(document.getElementById('admin-overlay').classList.contains('open')) loadAdminPosts();
+      if(!postsLoadedOnce) {
+        postsLoadedOnce = true;
+        if(postsLoadedResolve) postsLoadedResolve();
+      }
+    }, error => {
+      grid.innerHTML = '<div class="no-posts">Firebase error: ' + escHtml(error.message) + '</div>';
+      if(!postsLoadedOnce) {
+        postsLoadedOnce = true;
+        if(postsLoadedResolve) postsLoadedResolve();
+      }
     });
-    buildFilterBar(cats);
-    renderPosts(allPosts);
-  } catch(e) {
-    grid.innerHTML = '<div class="no-posts">Error loading posts. Please try again later.</div>';
-  }
+  });
 }
 
 function buildFilterBar(cats) {
@@ -926,6 +995,7 @@ function buildFilterBar(cats) {
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
     btn.textContent = cat;
+    if(cat === activeFilter) btn.classList.add('active');
     btn.onclick = function() { filterPosts(cat, this); };
     bar.appendChild(btn);
   });
@@ -942,7 +1012,7 @@ function filterPosts(cat, btn) {
 function renderPosts(posts) {
   const grid = document.getElementById('posts-grid');
   if(!posts.length) {
-    grid.innerHTML = '<div class="no-posts">🎨 No posts in this category yet.<br><span style="font-size:0.8rem;color:#555;">Check back soon!</span></div>';
+    grid.innerHTML = '<div class="no-posts">🎨 No products yet.<br><span style="font-size:0.8rem;color:#555;">Add products from the admin panel.</span></div>';
     return;
   }
   grid.innerHTML = '';
@@ -968,16 +1038,13 @@ function renderPosts(posts) {
 }
 
 // ============================================================
-// SINGLE POST VIEW
+// SINGLE PRODUCT VIEW
 // ============================================================
 function openPostView(id) {
   const post = allPosts.find(p => p.id === id);
   if(!post) return;
-
-  // Update URL
   const newUrl = window.location.pathname + '?post=' + id;
   history.pushState({ postId: id }, post.title, newUrl);
-
   showPostView(post);
 }
 
@@ -1002,11 +1069,10 @@ function showPostView(post) {
   const orderBtn = document.getElementById('pv-order-btn');
   if(post.orderLink) {
     orderBtn.href = post.orderLink;
-    orderBtn.style.display = 'inline-block';
   } else {
     orderBtn.href = 'mailto:sadithas59@gmail.com?subject=Order: ' + encodeURIComponent(post.title);
-    orderBtn.style.display = 'inline-block';
   }
+  orderBtn.style.display = 'inline-block';
 
   document.getElementById('post-view').classList.add('open');
   document.title = post.title + ' – Classic Creative Co';
@@ -1016,7 +1082,7 @@ function showPostView(post) {
 function closePostView() {
   document.getElementById('post-view').classList.remove('open');
   document.title = 'Classic Creative Co – Graphic & Web Design';
-  history.pushState({}, document.title, window.location.pathname);
+  if(window.location.search) history.pushState({}, document.title, window.location.pathname);
 }
 
 function showHome(e) {
@@ -1025,7 +1091,6 @@ function showHome(e) {
   window.scrollTo(0,0);
 }
 
-// Handle browser back/forward
 window.onpopstate = function(e) {
   if(e.state && e.state.postId) {
     const post = allPosts.find(p => p.id === e.state.postId);
@@ -1035,20 +1100,12 @@ window.onpopstate = function(e) {
   }
 };
 
-// Check URL for direct post link
-async function checkDirectPostUrl() {
+function checkDirectPostUrl() {
   const params = new URLSearchParams(window.location.search);
   const postId = params.get('post');
   if(postId) {
-    try {
-      const doc = await db.collection(POSTS_COLLECTION).doc(postId).get();
-      if(doc.exists) {
-        const post = { id: doc.id, ...doc.data() };
-        // Add to allPosts if not already there
-        if(!allPosts.find(p => p.id === postId)) allPosts.push(post);
-        showPostView(post);
-      }
-    } catch(e) { console.log('Post not found'); }
+    const post = allPosts.find(p => p.id === postId);
+    if(post) showPostView(post);
   }
 }
 
@@ -1097,5 +1154,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a098bc1ebf0424d1',t:'MTc4MTA5ODI3MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a098dbd94e04b77e',t:'MTc4MTA5OTU3MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
