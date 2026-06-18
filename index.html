@@ -1393,7 +1393,8 @@
           <div id="file-preview" style="margin-top:10px;"></div>
         </div>
       </div>
-      <button class="btn-gold" style="width:100%;" onclick="submitPost()">Publish Product 🚀</button>
+      <button class="btn-gold" id="publish-btn" style="width:100%;" onclick="submitPost()">Publish Product 🚀</button>
+      <button class="btn-gold" id="cancel-edit-btn" style="width:100%;margin-top:12px;background:transparent;border:1px solid rgba(10,37,64,0.25);color:#6B7A92;display:none;" onclick="cancelEditPost()">Cancel Edit</button>
     </div>
 
     <!-- MANAGE POSTS TAB -->
@@ -1628,6 +1629,15 @@ function resetPostForm() {
   document.getElementById('upload-progress-bar').style.width = '0%';
   document.getElementById('upload-progress-text').textContent = '';
   editPostId = null;
+  const publishBtn = document.getElementById('publish-btn');
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+  if(publishBtn) publishBtn.textContent = 'Publish Product 🚀';
+  if(cancelBtn) cancelBtn.style.display = 'none';
+}
+
+function cancelEditPost() {
+  resetPostForm();
+  showToast('Edit cancelled.', '');
 }
 
 function loadAdminPosts() {
@@ -1681,7 +1691,11 @@ function editPost(id) {
   document.getElementById('p-img-url').value = d.imageUrl || '';
   switchImgTab('url');
   document.querySelectorAll('.admin-tab')[0].click();
-  showToast('Editing product – make changes and click Publish.', '');
+  const publishBtn = document.getElementById('publish-btn');
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+  if(publishBtn) publishBtn.textContent = 'Update Product ✅';
+  if(cancelBtn) cancelBtn.style.display = 'block';
+  showToast('Editing product – make changes and click Update.', '');
 }
 
 // ============================================================
@@ -1754,7 +1768,6 @@ function renderPosts(posts) {
     const card = document.createElement('div');
     card.className = 'post-card reveal';
     const priceStr = post.price ? 'LKR ' + Number(post.price).toLocaleString() : 'Price on request';
-    const buttonText = post.buttonText ? escHtml(post.buttonText) : 'Order Now 🛒';
     const imgHtml = post.imageUrl
       ? `<img src="${escHtml(post.imageUrl)}" class="post-img" alt="${escHtml(post.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="post-img-placeholder" style="display:none;">🎨</div>`
       : `<div class="post-img-placeholder">🎨</div>`;
@@ -1765,7 +1778,7 @@ function renderPosts(posts) {
         <div class="post-title">${escHtml(post.title)}</div>
         <div class="post-desc">${escHtml(post.description || '')}</div>
         <div class="post-price gold-text">${priceStr}</div>
-        <button class="btn-order" onclick="handleProductButton('${post.id}')">${buttonText}</button>
+        <button class="btn-order" onclick="openPostView('${post.id}')">More Info ℹ️</button>
       </div>
     `;
     grid.appendChild(card);
@@ -1774,15 +1787,6 @@ function renderPosts(posts) {
 }
 
 
-function handleProductButton(id) {
-  const post = allPosts.find(p => p.id === id);
-  if(!post) return;
-  if(post.orderLink) {
-    window.open(post.orderLink, '_blank', 'noopener');
-  } else {
-    openPostView(id);
-  }
-}
 
 // ============================================================
 // SINGLE PRODUCT VIEW
@@ -1992,5 +1996,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d994d24e44aed1',t:'MTc4MTc3ODIzNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9b29f0e21b77e',t:'MTc4MTc3OTQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
