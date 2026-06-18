@@ -385,6 +385,167 @@
       border-radius: 3px;
     }
     #upload-progress-text { font-size: 0.75rem; color: var(--muted); }
+
+
+    /* ============================================================
+       TRUST-BUILDING ANIMATIONS + LIGHT/DARK THEME
+       ============================================================ */
+    :root {
+      --surface: #FFFFFF;
+      --surface-soft: #F4F7FB;
+      --surface-softer: #EAF0F9;
+      --shadow: rgba(10,37,64,0.14);
+      --ring: rgba(30,77,140,0.28);
+      --success: #16a34a;
+      --nav-bg: rgba(255,255,255,0.88);
+      --hero-gradient: linear-gradient(135deg, #FFFFFF 0%, #EAF0F9 50%, #FFFFFF 100%);
+      --card-glow: 0 18px 55px rgba(10,37,64,0.12);
+      color-scheme: light;
+    }
+    [data-theme="dark"] {
+      --blue: #8AB4FF;
+      --blue-light: #7CB7FF;
+      --blue-lighter: #A7D0FF;
+      --white: #0B1220;
+      --light: #101B2D;
+      --light2: #16243A;
+      --text: #EAF2FF;
+      --muted: #AAB8CF;
+      --surface: #0B1220;
+      --surface-soft: #101B2D;
+      --surface-softer: #16243A;
+      --shadow: rgba(0,0,0,0.38);
+      --ring: rgba(138,180,255,0.34);
+      --nav-bg: rgba(11,18,32,0.86);
+      --hero-gradient: linear-gradient(135deg, #0B1220 0%, #101B2D 48%, #07101F 100%);
+      --card-glow: 0 18px 55px rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+    [data-theme="dark"] .gold-text {
+      background: linear-gradient(135deg, #EAF2FF, #7CB7FF 58%, #BFE0FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    [data-theme="dark"] #navbar { background: var(--nav-bg); border-bottom-color: rgba(138,180,255,0.16); }
+    [data-theme="dark"] .mobile-menu { background: var(--surface); border-top-color: rgba(138,180,255,0.16); }
+    [data-theme="dark"] .form-input,
+    [data-theme="dark"] .form-textarea,
+    [data-theme="dark"] .form-select,
+    [data-theme="dark"] .admin-post-item,
+    [data-theme="dark"] .admin-tab { background: var(--surface-soft); }
+    [data-theme="dark"] .post-img-placeholder { background: linear-gradient(135deg, #16243A, #20395F); }
+    [data-theme="dark"] .btn-gold { color: #07101F; background: linear-gradient(135deg, #8AB4FF, #BFE0FF); }
+    [data-theme="dark"] .btn-order { color: #07101F; background: linear-gradient(135deg, #8AB4FF, #BFE0FF); }
+
+    #navbar { transition: background .35s ease, border-color .35s ease, box-shadow .35s ease; }
+    #navbar.scrolled { box-shadow: 0 12px 34px var(--shadow); }
+    #hero { background: var(--hero-gradient); }
+    body, #hero, #services, #portfolio, #about, #contact, .service-card, .post-card, .contact-card,
+    .admin-modal, .login-modal, #post-view, #toast, .mobile-menu {
+      transition: background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(10,37,64,0.16); background: var(--surface);
+      color: var(--text); border-radius: 999px; padding: 7px 12px;
+      font-size: .84rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(10,37,64,0.08);
+      position: relative; overflow: hidden;
+    }
+    .theme-toggle::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(124,183,255,.22), transparent);
+      transform: translateX(-120%); transition: transform .65s ease;
+    }
+    .theme-toggle:hover::before { transform: translateX(120%); }
+    .theme-icon { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--light); }
+    [data-theme="dark"] .theme-toggle { border-color: rgba(138,180,255,0.22); }
+    [data-theme="dark"] .theme-icon { background: #16243A; }
+    @media(max-width:768px){ .theme-toggle { margin-left: auto; margin-right: 12px; padding: 7px 10px; } .theme-label { display:none; } }
+
+    .btn-gold, .btn-order, .filter-btn, .admin-tab, .img-tab, .contact-card, .service-card, .post-card {
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, background .28s ease, color .28s ease;
+    }
+    .btn-gold:hover, .btn-order:hover { transform: translateY(-3px); box-shadow: 0 14px 34px var(--shadow); }
+    .service-card:hover, .post-card:hover, .contact-card:hover { transform: translateY(-8px); box-shadow: var(--card-glow); }
+
+    #hero::after {
+      content: ''; position: absolute; width: 520px; height: 520px; border-radius: 50%;
+      right: -180px; top: 12%;
+      background: radial-gradient(circle, rgba(59,111,196,.16), transparent 62%);
+      animation: floatOrb 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .hero-title { animation: heroPop .9s cubic-bezier(.2,.8,.2,1) both; }
+    .hero-sub { animation: fadeUp .9s ease .16s both; }
+    #hero .btn-gold { animation: fadeUp .9s ease .28s both, trustPulse 2.8s ease-in-out 1.6s infinite; }
+    .stat { animation: fadeUp .8s ease both; }
+    .stat:nth-child(1){ animation-delay: .38s; } .stat:nth-child(2){ animation-delay: .48s; } .stat:nth-child(3){ animation-delay: .58s; }
+
+    .trust-strip {
+      max-width: 920px; margin: 34px auto 0; display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px;
+    }
+    .trust-pill {
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.72); border: 1px solid rgba(30,77,140,0.14);
+      color: var(--text); font-size: .86rem; font-weight: 700;
+      box-shadow: 0 10px 30px rgba(10,37,64,.08); backdrop-filter: blur(10px);
+      animation: fadeUp .8s ease both;
+    }
+    [data-theme="dark"] .trust-pill { background: rgba(16,27,45,0.72); border-color: rgba(138,180,255,.18); }
+    .trust-pill:nth-child(1){ animation-delay: .70s; } .trust-pill:nth-child(2){ animation-delay: .80s; } .trust-pill:nth-child(3){ animation-delay: .90s; }
+    .trust-check {
+      width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+      background: rgba(22,163,74,.12); color: var(--success);
+      animation: checkGlow 2.6s ease-in-out infinite;
+    }
+
+    #trust { padding: 80px 20px; background: var(--white); position: relative; overflow: hidden; }
+    #trust::before {
+      content: ''; position: absolute; inset: auto -160px -180px auto; width: 440px; height: 440px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(30,77,140,.10), transparent 66%);
+      animation: floatOrb 9s ease-in-out infinite alternate-reverse;
+    }
+    .trust-grid { max-width: 1120px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 22px; position: relative; z-index: 1; }
+    .trust-card {
+      background: var(--white); border: 1px solid rgba(10,37,64,.12); border-radius: 18px; padding: 26px 22px;
+      box-shadow: 0 8px 30px rgba(10,37,64,.06); overflow: hidden; position: relative;
+      transition: transform .32s ease, box-shadow .32s ease, border-color .32s ease;
+    }
+    .trust-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(59,111,196,.10) 48%, transparent 72%);
+      transform: translateX(-125%); transition: transform .8s ease;
+    }
+    .trust-card:hover { transform: translateY(-8px); box-shadow: var(--card-glow); border-color: var(--ring); }
+    .trust-card:hover::before { transform: translateX(125%); }
+    .trust-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 1.45rem; background: rgba(30,77,140,.10); margin-bottom: 14px; animation: softFloat 3.8s ease-in-out infinite; }
+    .trust-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; color: var(--text); position: relative; }
+    .trust-text { color: var(--muted); font-size: .9rem; line-height: 1.65; position: relative; }
+    .mini-stars { color: #f59e0b; letter-spacing: 2px; margin-top: 14px; position: relative; }
+
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .75s ease, transform .75s cubic-bezier(.2,.8,.2,1); }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .service-card.reveal:nth-child(2), .post-card.reveal:nth-child(2), .contact-card.reveal:nth-child(2), .trust-card.reveal:nth-child(2) { transition-delay: .08s; }
+    .service-card.reveal:nth-child(3), .post-card.reveal:nth-child(3), .contact-card.reveal:nth-child(3), .trust-card.reveal:nth-child(3) { transition-delay: .16s; }
+    .service-card.reveal:nth-child(4), .post-card.reveal:nth-child(4), .contact-card.reveal:nth-child(4), .trust-card.reveal:nth-child(4) { transition-delay: .24s; }
+
+    @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+    @keyframes heroPop { from { opacity:0; transform: translateY(18px) scale(.96); } to { opacity:1; transform: translateY(0) scale(1); } }
+    @keyframes floatOrb { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-24px,28px,0) scale(1.08); } }
+    @keyframes softFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+    @keyframes trustPulse { 0%,100% { box-shadow: 0 4px 20px rgba(10,37,64,.18); } 50% { box-shadow: 0 0 0 9px rgba(30,77,140,.08), 0 18px 42px rgba(10,37,64,.22); } }
+    @keyframes checkGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(22,163,74,.18); } 50% { box-shadow: 0 0 0 8px rgba(22,163,74,0); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
   </style>
 </head>
 <body>
@@ -398,9 +559,14 @@
     <div class="nav-links">
       <a href="#portfolio">Products</a>
       <a href="#services">Services</a>
+      <a href="#trust">Why Trust Us</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark theme">
+      <span class="theme-icon" id="theme-icon">🌙</span>
+      <span class="theme-label" id="theme-label">Dark</span>
+    </button>
     <div class="hamburger" onclick="toggleMobile()">
       <span></span><span></span><span></span>
     </div>
@@ -408,6 +574,7 @@
   <div class="mobile-menu" id="mobile-menu">
     <a href="#portfolio" onclick="toggleMobile()">Products</a>
     <a href="#services" onclick="toggleMobile()">Services</a>
+    <a href="#trust" onclick="toggleMobile()">Why Trust Us</a>
     <a href="#about" onclick="toggleMobile()">About</a>
     <a href="#contact" onclick="toggleMobile()">Contact</a>
   </div>
@@ -425,17 +592,22 @@
       <a href="#portfolio" class="btn-gold">Explore Products</a>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-num gold-text">150+</div>
+          <div class="stat-num gold-text" data-count="150" data-suffix="+">150+</div>
           <div class="stat-label">Projects Done</div>
         </div>
         <div class="stat">
-          <div class="stat-num gold-text">80+</div>
+          <div class="stat-num gold-text" data-count="80" data-suffix="+">80+</div>
           <div class="stat-label">Happy Clients</div>
         </div>
         <div class="stat">
           <div class="stat-num gold-text">5★</div>
           <div class="stat-label">Rating</div>
         </div>
+      </div>
+      <div class="trust-strip" aria-label="Trust highlights">
+        <div class="trust-pill"><span class="trust-check">✓</span> Clear project process</div>
+        <div class="trust-pill"><span class="trust-check">✓</span> On-time delivery</div>
+        <div class="trust-pill"><span class="trust-check">✓</span> Revisions included</div>
       </div>
     </div>
   </section>
@@ -485,6 +657,36 @@
     </div>
   </section>
 
+  <!-- TRUST -->
+  <section id="trust">
+    <div class="section-title gold-text">Why Clients Trust Us</div>
+    <div class="gold-divider"></div>
+    <p class="section-sub">Reliable design support for brands that need professional graphics and websites.</p>
+    <div class="trust-grid">
+      <div class="trust-card reveal">
+        <div class="trust-icon">✅</div>
+        <div class="trust-title">Transparent Workflow</div>
+        <p class="trust-text">You know exactly what happens next: brief, concept, design, revision and final delivery.</p>
+      </div>
+      <div class="trust-card reveal">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-title">Business-Ready Quality</div>
+        <p class="trust-text">Every logo, post and website is created to look polished, responsive and ready for customers.</p>
+      </div>
+      <div class="trust-card reveal">
+        <div class="trust-icon">💬</div>
+        <div class="trust-title">Friendly Communication</div>
+        <p class="trust-text">Quick updates, clear guidance and simple explanations so your project feels stress-free.</p>
+      </div>
+      <div class="trust-card reveal">
+        <div class="trust-icon">⭐</div>
+        <div class="trust-title">Trusted Creative Results</div>
+        <p class="trust-text">A portfolio-focused studio with 150+ completed projects and strong attention to detail.</p>
+        <div class="mini-stars">★★★★★</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT -->
   <section id="about">
     <div class="section-title gold-text">About Us</div>
@@ -529,7 +731,7 @@
   <footer>
     <p class="gold-text" style="font-weight:700;margin-bottom:6px;">Classic Creative Co</p>
     <p class="footer-text">Graphic Design & Web Design Studio · Sri Lanka</p>
-    <p class="footer-text" style="margin-top:8px;">© 2025 Classic Creative Co. All rights reserved.</p>
+    <p class="footer-text" style="margin-top:8px;">© 2026 Classic Creative Co. All rights reserved.</p>
   </footer>
 </div>
 
@@ -980,7 +1182,7 @@ function renderPosts(posts) {
   grid.innerHTML = '';
   posts.forEach(post => {
     const card = document.createElement('div');
-    card.className = 'post-card';
+    card.className = 'post-card reveal';
     const priceStr = post.price ? 'LKR ' + Number(post.price).toLocaleString() : 'Price on request';
     const imgHtml = post.imageUrl
       ? `<img src="${escHtml(post.imageUrl)}" class="post-img" alt="${escHtml(post.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="post-img-placeholder" style="display:none;">🎨</div>`
@@ -997,6 +1199,7 @@ function renderPosts(posts) {
     `;
     grid.appendChild(card);
   });
+  observeReveals();
 }
 
 // ============================================================
@@ -1103,11 +1306,101 @@ function escHtml(str) {
     .replace(/"/g,'&quot;');
 }
 
+
+
+// ============================================================
+// THEME + TRUST ANIMATIONS
+// ============================================================
+function applyTheme(theme) {
+  const chosen = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', chosen);
+  localStorage.setItem('ccc-theme', chosen);
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-label');
+  const btn = document.getElementById('theme-toggle');
+  if(icon) icon.textContent = chosen === 'dark' ? '☀️' : '🌙';
+  if(label) label.textContent = chosen === 'dark' ? 'Light' : 'Dark';
+  if(btn) btn.setAttribute('aria-label', chosen === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+let revealObserver;
+function observeReveals() {
+  const items = document.querySelectorAll('.reveal:not([data-observed])');
+  if(!items.length) return;
+  if(!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  if(!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+  }
+  items.forEach(el => {
+    el.setAttribute('data-observed', 'true');
+    revealObserver.observe(el);
+  });
+}
+
+function animateCounters() {
+  const counters = document.querySelectorAll('[data-count]');
+  if(!counters.length) return;
+  const run = el => {
+    if(el.dataset.counted) return;
+    el.dataset.counted = 'true';
+    const target = Number(el.dataset.count || 0);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if(progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  };
+  if(!('IntersectionObserver' in window)) { counters.forEach(run); return; }
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        run(entry.target);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .5 });
+  counters.forEach(el => counterObserver.observe(el));
+}
+
+function initTrustAnimations() {
+  document.querySelectorAll('.section-title, .section-sub, .gold-divider, .service-card, .contact-card, .about-inner').forEach(el => {
+    if(!el.classList.contains('reveal')) el.classList.add('reveal');
+  });
+  observeReveals();
+  animateCounters();
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if(nav) nav.classList.toggle('scrolled', window.scrollY > 12);
+  }, { passive: true });
+}
+
 // ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+  applyTheme(localStorage.getItem('ccc-theme') || 'light');
   setLogos();
+  initTrustAnimations();
   loadPosts().then(() => checkDirectPostUrl());
 
   // Enter key on login
@@ -1116,5 +1409,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d97a9e38d9b95e',t:'MTc4MTc3NzE2MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
