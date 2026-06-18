@@ -1359,8 +1359,9 @@
         <textarea class="form-textarea" id="p-desc" placeholder="Describe the service or product..."></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Price (LKR)</label>
-        <input type="number" class="form-input" id="p-price" placeholder="e.g. 5000"/>
+        <label class="form-label">Price / Price Text</label>
+        <input type="text" class="form-input" id="p-price" placeholder="e.g. LKR 5,000 / Starting from LKR 10,000 / Free"/>
+        <div style="font-size:0.75rem;margin-top:5px;color:#6B7A92;">You can type numbers or custom text.</div>
       </div>
       <div class="form-group">
         <label class="form-label">Order Link (WhatsApp / Email / URL)</label>
@@ -1573,7 +1574,7 @@ async function submitPost() {
     }
   }
 
-  const price = priceRaw ? parseInt(priceRaw, 10) : null;
+  const price = priceRaw || null;
 
   try {
     if(editPostId) {
@@ -1656,7 +1657,7 @@ function loadAdminPosts() {
         : `<div style="width:56px;height:56px;background:#EAF0F9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🎨</div>`}
       <div class="admin-post-info">
         <div class="admin-post-title">${escHtml(d.title)}</div>
-        <div class="admin-post-meta">${escHtml(d.category)} · ${d.price ? 'LKR ' + Number(d.price).toLocaleString() : 'Price on request'}</div>
+        <div class="admin-post-meta">${escHtml(d.category)} · ${formatPrice(d.price)}</div>
       </div>
       <button class="btn-edit" onclick="editPost('${d.id}')">Edit</button>
       <button class="btn-delete" onclick="deletePost('${d.id}', this)">Delete</button>
@@ -1767,7 +1768,7 @@ function renderPosts(posts) {
   posts.forEach(post => {
     const card = document.createElement('div');
     card.className = 'post-card reveal';
-    const priceStr = post.price ? 'LKR ' + Number(post.price).toLocaleString() : 'Price on request';
+    const priceStr = formatPrice(post.price);
     const imgHtml = post.imageUrl
       ? `<img src="${escHtml(post.imageUrl)}" class="post-img" alt="${escHtml(post.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="post-img-placeholder" style="display:none;">🎨</div>`
       : `<div class="post-img-placeholder">🎨</div>`;
@@ -1803,7 +1804,7 @@ function showPostView(post) {
   document.getElementById('pv-title').textContent = post.title || '';
   document.getElementById('pv-cat').textContent = post.category || '';
   document.getElementById('pv-desc').textContent = post.description || '';
-  document.getElementById('pv-price').textContent = post.price ? 'LKR ' + Number(post.price).toLocaleString() : 'Price on request';
+  document.getElementById('pv-price').textContent = formatPrice(post.price);
 
   const img = document.getElementById('pv-img');
   const placeholder = document.getElementById('pv-img-placeholder');
@@ -1884,6 +1885,17 @@ function showToast(msg, type) {
 // ============================================================
 // HELPERS
 // ============================================================
+
+function formatPrice(price) {
+  if(price === null || price === undefined || price === '') return 'Price on request';
+  if(typeof price === 'number' && isFinite(price)) return 'LKR ' + Number(price).toLocaleString();
+  const value = String(price).trim();
+  if(!value) return 'Price on request';
+  // Old products may have only a plain number saved. Keep those formatted nicely.
+  if(/^\d+(\.\d+)?$/.test(value)) return 'LKR ' + Number(value).toLocaleString();
+  return value;
+}
+
 function escHtml(str) {
   if(!str) return '';
   return String(str)
@@ -1996,5 +2008,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9b29f0e21b77e',t:'MTc4MTc3OTQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
