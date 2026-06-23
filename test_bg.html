@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #f4f7fb; margin: 0; padding: 0; overflow: hidden; height: 100vh; display: flex; align-items: center; justify-content: center;}
+  
+  .hero-human-bg {
+    position: absolute;
+    bottom: -20px;
+    right: 5%;
+    width: 600px;
+    height: 500px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .desk-base { fill: #EAF0F9; stroke: #cddced; stroke-width: 4; }
+  .monitor-base { fill: #16263F; }
+  .monitor-screen { fill: #0A2540; animation: screenGlow 4s infinite alternate; }
+  .human-body { fill: #1E4D8C; }
+  .human-skin { fill: #F5D0B5; }
+  
+  @keyframes screenGlow {
+    0% { fill: #0A2540; }
+    50% { fill: #1E4D8C; }
+    100% { fill: #0A2540; }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes typeLeft {
+    0% { transform: rotate(0deg) translateY(0); }
+    100% { transform: rotate(5deg) translateY(6px); }
+  }
+  @keyframes typeRight {
+    0% { transform: rotate(0deg) translateY(0); }
+    100% { transform: rotate(-5deg) translateY(6px); }
+  }
+  @keyframes floatItem {
+    0% { transform: translateY(15px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-60px); opacity: 0; }
+  }
+  
+  .head-group { animation: bob 5s ease-in-out infinite; transform-origin: center; }
+  .arm-left { animation: typeLeft 0.35s infinite alternate; transform-origin: 200px 300px; }
+  .arm-right { animation: typeRight 0.4s infinite alternate-reverse; transform-origin: 300px 300px; }
+  
+  .float-icon { font-size: 32px; font-weight: bold; fill: #3B6FC4; animation: floatItem 5s infinite linear; }
+  .float-icon.i1 { animation-delay: 0s; left: 100px; }
+  .float-icon.i2 { animation-delay: 1.5s; fill: #f59e0b; font-size: 40px;}
+  .float-icon.i3 { animation-delay: 3s; fill: #10b981; }
+
+</style>
+</head>
+<body>
+  <div class="hero-human-bg">
+    <svg viewBox="0 0 600 500" width="100%" height="100%">
+      
+      <!-- Body & Chair -->
+      <path d="M250 480 L350 480 L350 550 L250 550 Z" fill="#3B6FC4" />
+      <!-- Human Torso -->
+      <path d="M180 320 C180 250, 320 250, 320 320 L330 480 L170 480 Z" class="human-body" />
+      
+      <!-- Head Group -->
+      <g class="head-group">
+        <!-- Neck -->
+        <rect x="235" y="200" width="30" height="40" class="human-skin" />
+        <!-- Head -->
+        <circle cx="250" cy="160" r="45" class="human-skin" />
+        <!-- Hair/Headphones -->
+        <path d="M200 160 C200 100, 300 100, 300 160 C310 160, 310 190, 300 190 C290 190, 290 170, 280 170 C280 140, 220 140, 220 170 C210 170, 210 190, 200 190 C190 190, 190 160, 200 160" fill="#16263F" />
+      </g>
+
+      <!-- Arms -->
+      <path d="M180 280 Q130 350, 150 400 Q160 410, 180 400 Q190 350, 210 300 Z" class="human-skin arm-left" />
+      <path d="M320 280 Q370 350, 350 400 Q340 410, 320 400 Q310 350, 290 300 Z" class="human-skin arm-right" />
+
+      <!-- Desk -->
+      <path d="M0 420 L600 420 L550 500 L50 500 Z" class="desk-base" />
+      <rect x="30" y="430" width="540" height="15" fill="#cddced" />
+
+      <!-- Monitor Stand -->
+      <path d="M230 420 L270 420 L260 360 L240 360 Z" fill="#6B7A92" />
+      <rect x="200" y="415" width="100" height="5" fill="#16263F" />
+
+      <!-- Monitor -->
+      <rect x="100" y="200" width="300" height="180" rx="12" class="monitor-base" />
+      <rect x="110" y="210" width="280" height="150" rx="6" class="monitor-screen" />
+      
+      <!-- Code lines -->
+      <rect x="120" y="230" width="100" height="8" fill="#FFFFFF" opacity="0.8" />
+      <rect x="120" y="250" width="180" height="8" fill="#FFFFFF" opacity="0.6" />
+      <rect x="120" y="270" width="140" height="8" fill="#FFFFFF" opacity="0.4" />
+      <rect x="120" y="290" width="220" height="8" fill="#FFFFFF" opacity="0.7" />
+      <rect x="120" y="310" width="80" height="8" fill="#FFFFFF" opacity="0.5" />
+      
+      <!-- Keyboard -->
+      <path d="M180 440 L320 440 L330 460 L170 460 Z" fill="#6B7A92" />
+      
+      <!-- Coffee Mug -->
+      <rect x="420" y="380" width="30" height="40" rx="5" fill="#3B6FC4" />
+      <path d="M450 390 C460 390, 460 410, 450 410" fill="none" stroke="#3B6FC4" stroke-width="5" />
+      <path d="M430 370 Q435 350, 440 365" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.6" class="head-group" />
+      
+      <!-- Plant -->
+      <rect x="50" y="390" width="40" height="30" fill="#F5D0B5" />
+      <path d="M70 390 Q50 350, 60 330 Q80 340, 70 390" fill="#10b981" />
+      <path d="M70 390 Q90 340, 80 320 Q60 340, 70 390" fill="#059669" />
+      <path d="M70 390 Q70 330, 75 310 Q85 330, 70 390" fill="#34d399" />
+
+      <!-- Floating Elements -->
+      <text x="50" y="150" class="float-icon i1">&lt;/&gt;</text>
+      <text x="400" y="100" class="float-icon i2">{ }</text>
+      <text x="480" y="200" class="float-icon i3">#</text>
+      <text x="250" y="80" class="float-icon" style="animation-delay: 2s; fill:#1E4D8C;">✨</text>
+      <text x="350" y="150" class="float-icon" style="animation-delay: 4s; font-size:24px;">CSS</text>
+    </svg>
+  </div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a107297e0eb5aed1',t:'MTc4MjI1NjE4NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
