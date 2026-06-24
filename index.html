@@ -245,6 +245,26 @@
 
     /* PORTFOLIO / POSTS */
     #portfolio { padding: 80px 20px; background: var(--white); }
+    .search-container {
+      max-width: 480px; margin: 0 auto 32px auto;
+      position: relative;
+    }
+    .search-input {
+      width: 100%; padding: 14px 20px 14px 44px;
+      border-radius: 50px; border: 1px solid rgba(10,37,64,0.15);
+      background: var(--light); color: var(--text);
+      font-size: 0.95rem; transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(10,37,64,0.03);
+    }
+    .search-input:focus {
+      outline: none; border-color: var(--blue-light);
+      box-shadow: 0 6px 20px rgba(10,37,64,0.1); background: var(--white);
+    }
+    .search-icon {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%); color: var(--muted);
+      font-size: 1.1rem; pointer-events: none;
+    }
     .filter-bar {
       display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px;
     }
@@ -333,8 +353,11 @@
       background: var(--white); border: 1px solid rgba(10,37,64,0.12);
       border-radius: 14px; padding: 24px 16px; text-align: center;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
+      text-decoration: none; color: inherit; display: block;
     }
-    .contact-icon { font-size: 2rem; margin-bottom: 10px; transition: transform 0.4s ease; }
+    .contact-icon { font-size: 2rem; margin-bottom: 10px; transition: transform 0.4s ease; display: flex; justify-content: center; align-items: center; height: 40px; }
+    .contact-icon svg { width: 36px; height: 36px; }
+    [data-theme="dark"] .theme-invert { fill: #EAF2FF !important; }
     .contact-card:hover .contact-icon { transform: scale(1.2) translateY(-3px); }
     .contact-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
     .contact-val { font-size: 0.88rem; color: var(--blue-light); word-break: break-all; }
@@ -586,6 +609,8 @@
     [data-theme="dark"] .form-select,
     [data-theme="dark"] .admin-post-item,
     [data-theme="dark"] .admin-tab { background: var(--surface-soft); }
+    [data-theme="dark"] .search-input { background: var(--surface-soft); border-color: rgba(138,180,255,0.16); color: var(--text); }
+    [data-theme="dark"] .search-input:focus { background: var(--surface); border-color: var(--blue-light); }
     [data-theme="dark"] .post-img-placeholder { background: linear-gradient(135deg, #16243A, #20395F); }
     [data-theme="dark"] .btn-gold { color: #07101F; background: linear-gradient(135deg, #8AB4FF, #BFE0FF); }
     [data-theme="dark"] .btn-order { color: #07101F; background: linear-gradient(135deg, #8AB4FF, #BFE0FF); }
@@ -1381,6 +1406,12 @@
     <div class="section-title gold-text">Our Products</div>
     <div class="gold-divider"></div>
     <p class="section-sub">Browse our latest products and creative work</p>
+    
+    <div class="search-container reveal">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="product-search" class="search-input" placeholder="Search for products..." oninput="handleSearch(this.value)">
+    </div>
+
     <div class="filter-bar" id="filter-bar">
       <button class="filter-btn active" onclick="filterPosts('all', this)">All</button>
     </div>
@@ -1471,21 +1502,36 @@
       <div class="gold-divider"></div>
       <p class="section-sub">Ready to start your project? Reach out to us!</p>
       <div class="contact-cards">
-        <div class="contact-card">
+        <a href="/cdn-cgi/l/email-protection#96e5f7f2ffe2fef7e5a3afd6f1fbf7fffab8f5f9fb" class="contact-card reveal">
           <div class="contact-icon">✉️</div>
           <div class="contact-label">Email</div>
-          <div class="contact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="645745404d504c4557111d644349454d480a474b49">[<span class="__cf_email__" data-cfemail="f18290959885999082c4c8b1969c90989ddf929e9c">[email&#160;protected]</span>]</a></div>
-        </div>
-        <div class="contact-card">
-          <div class="contact-icon">🌍</div>
-          <div class="contact-label">Location</div>
-          <div class="contact-val">Sri Lanka</div>
-        </div>
-        <div class="contact-card">
-          <div class="contact-icon">🕐</div>
-          <div class="contact-label">Working Hours</div>
-          <div class="contact-val">Mon – Sat, 9AM – 6PM</div>
-        </div>
+          <div class="contact-val"><span class="__cf_email__" data-cfemail="d4a7b5b0bda0bcb5a7e1ed94b3b9b5bdb8fab7bbb9">classiceditsco@gmail.com</span></div>
+        </a>
+        <a href="YOUR_WHATSAPP_LINK_HERE" target="_blank" class="contact-card reveal">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.8 5.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+          <div class="contact-label">WhatsApp</div>
+          <div class="contact-val" style="font-weight:600;">Join Channel</div>
+        </a>
+        <a href="https://www.tiktok.com/@classiceditsco" target="_blank" class="contact-card reveal">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="#000000" class="theme-invert"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.78-1.15 5.54-3.33 7.37-1.92 1.62-4.55 2.28-6.98 1.88-2.64-.4-5.02-2.22-5.87-4.75-.95-2.82-.24-6.12 1.88-8.21 1.94-1.89 4.79-2.64 7.39-2.14v4.06c-1.39-.23-2.9-.1-4.08.7-1.16.78-1.86 2.16-1.84 3.55.03 1.78 1.43 3.4 3.2 3.65 1.61.22 3.32-.4 4.15-1.78.69-1.14.94-2.54.91-3.87V.02z"/></svg></div>
+          <div class="contact-label">TikTok</div>
+          <div class="contact-val" style="font-weight:600;">Follow Us</div>
+        </a>
+        <a href="YOUR_FACEBOOK_LINK_HERE" target="_blank" class="contact-card reveal">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+          <div class="contact-label">Facebook</div>
+          <div class="contact-val" style="font-weight:600;">Like Page</div>
+        </a>
+        <a href="YOUR_INSTAGRAM_LINK_HERE" target="_blank" class="contact-card reveal">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.869a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg></div>
+          <div class="contact-label">Instagram</div>
+          <div class="contact-val" style="font-weight:600;">Follow Us</div>
+        </a>
+        <a href="YOUR_TELEGRAM_LINK_HERE" target="_blank" class="contact-card reveal">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="#229ED9"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+          <div class="contact-label">Telegram</div>
+          <div class="contact-val" style="font-weight:600;">Join Channel</div>
+        </a>
       </div>
     </div>
   </section>
@@ -1659,7 +1705,7 @@
 <!-- TOAST -->
 <div id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================================
 // FIREBASE CONFIG - HTML ONLY VERSION
 // ============================================================
@@ -1969,8 +2015,7 @@ function loadPosts() {
         if(data.category) cats.add(data.category);
       });
       buildFilterBar(cats);
-      const filtered = activeFilter === 'all' ? allPosts : allPosts.filter(p => p.category === activeFilter);
-      renderPosts(filtered);
+      applyCombinedFilters();
       if(document.getElementById('admin-overlay').classList.contains('open')) loadAdminPosts();
       if(!postsLoadedOnce) {
         postsLoadedOnce = true;
@@ -1988,7 +2033,7 @@ function loadPosts() {
 
 function buildFilterBar(cats) {
   const bar = document.getElementById('filter-bar');
-  bar.innerHTML = '<button class="filter-btn active" onclick="filterPosts(\'all\', this)">All</button>';
+  bar.innerHTML = '<button class="filter-btn ' + (activeFilter === 'all' ? 'active' : '') + '" onclick="filterPosts(\'all\', this)">All</button>';
   cats.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
@@ -1999,11 +2044,34 @@ function buildFilterBar(cats) {
   });
 }
 
+let currentSearchQuery = '';
+
+function handleSearch(query) {
+  currentSearchQuery = query.toLowerCase().trim();
+  applyCombinedFilters();
+}
+
 function filterPosts(cat, btn) {
   activeFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const filtered = cat === 'all' ? allPosts : allPosts.filter(p => p.category === cat);
+  if (btn) {
+    document.querySelectorAll('#filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  applyCombinedFilters();
+}
+
+function applyCombinedFilters() {
+  let filtered = allPosts;
+  if(activeFilter !== 'all') {
+    filtered = filtered.filter(p => p.category === activeFilter);
+  }
+  if(currentSearchQuery) {
+    filtered = filtered.filter(p => 
+      (p.title && p.title.toLowerCase().includes(currentSearchQuery)) || 
+      (p.description && p.description.toLowerCase().includes(currentSearchQuery)) ||
+      (p.category && p.category.toLowerCase().includes(currentSearchQuery))
+    );
+  }
   renderPosts(filtered);
 }
 
@@ -2291,5 +2359,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10794e9a9995137',t:'MTc4MjI2MDU4Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a107bfc11f7724d1',t:'MTc4MjI2MjMzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
