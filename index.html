@@ -477,43 +477,87 @@
       position: fixed;
       bottom: -30px;
       right: -20px;
-      width: clamp(250px, 40vw, 500px);
+      width: clamp(280px, 42vw, 550px);
       max-width: 100vw;
       aspect-ratio: 6/5;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
-      opacity: 0.15;
-      animation: fadeUp 1.2s ease-out both;
+      opacity: 0.18;
+      animation: softFloat 4s ease-in-out infinite;
     }
     @media(max-width: 768px) {
       .product-human-bg {
-        width: clamp(250px, 90vw, 400px);
-        right: -5%;
-        bottom: 0;
-        opacity: 0.08;
+        width: clamp(280px, 88vw, 440px) !important;
+        right: 0 !important;
+        left: 0 !important;
+        margin: 0 auto !important;
+        top: 110px !important;
+        bottom: auto !important;
+        opacity: 0.22 !important;
       }
     }
-    [data-theme="dark"] .product-human-bg { opacity: 0.08; }
+    [data-theme="dark"] .product-human-bg { opacity: 0.12; }
     @media(max-width: 768px) {
-      [data-theme="dark"] .product-human-bg { opacity: 0.04; }
+      [data-theme="dark"] .product-human-bg { opacity: 0.15 !important; }
     }
 
     #post-view {
       display: none; position: fixed; inset: 0; z-index: 8888;
       background: var(--white); overflow-y: auto;
     }
-    #post-view.open { display: block; }
-    .post-view-inner { max-width: 800px; margin: auto; padding: 80px 20px 60px; }
+    #post-view.open { 
+      display: block; 
+      animation: modalSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .post-view-inner { max-width: 800px; margin: auto; padding: 80px 20px 60px; position: relative; z-index: 1; }
+    @media(max-width: 768px) {
+      .post-view-inner { padding: 70px 16px 50px; }
+      .post-view-img { max-height: 300px !important; border-radius: 14px !important; margin-bottom: 20px !important; }
+      .post-view-title { font-size: 1.6rem !important; margin-bottom: 12px !important; }
+      .post-view-price { font-size: 1.3rem !important; margin-bottom: 20px !important; }
+    }
     .post-view-back {
       display: inline-flex; align-items: center; gap: 8px;
-      color: var(--blue-light); text-decoration: none; font-size: 0.9rem;
-      margin-bottom: 28px; cursor: pointer; border: none; background: none;
+      color: var(--blue-light); text-decoration: none; font-size: 0.92rem; font-weight: 600;
+      margin-bottom: 24px; cursor: pointer; border: none; background: none;
+      transition: transform 0.25s ease;
     }
-    .post-view-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 16px; margin-bottom: 28px; }
-    .post-view-cat { margin-bottom: 12px; }
-    .post-view-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; margin-bottom: 16px; }
-    .post-view-desc { color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 24px; white-space: pre-wrap; }
-    .post-view-price { font-size: 1.5rem; font-weight: 800; margin-bottom: 28px; }
+    .post-view-back:hover { transform: translateX(-4px); }
+    .post-view-img { 
+      width: 100%; max-height: 420px; object-fit: cover; border-radius: 18px; margin-bottom: 28px;
+      box-shadow: 0 16px 40px rgba(10,37,64,0.12);
+      animation: fadeUp 0.5s ease both;
+    }
+    .post-view-cat { margin-bottom: 12px; animation: fadeUp 0.5s ease 0.1s both; }
+    .post-view-title { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 800; margin-bottom: 14px; animation: fadeUp 0.5s ease 0.15s both; }
+    
+    /* Description with 7-line clamp */
+    .post-view-desc { 
+      color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap; word-break: break-word;
+      animation: fadeUp 0.5s ease 0.2s both;
+    }
+    .post-view-desc.collapsed {
+      display: -webkit-box;
+      -webkit-line-clamp: 7;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .readmore-btn {
+      background: transparent; border: none; color: var(--blue-light); font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; padding: 4px 0; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px;
+      transition: color 0.2s ease, transform 0.2s ease;
+      animation: fadeUp 0.5s ease 0.25s both;
+    }
+    .readmore-btn:hover { color: var(--blue); transform: translateX(3px); }
+    [data-theme="dark"] .readmore-btn { color: #7CB7FF; }
+    [data-theme="dark"] .readmore-btn:hover { color: #A7D0FF; }
+
+    .post-view-price { font-size: 1.5rem; font-weight: 800; margin-bottom: 28px; animation: fadeUp 0.5s ease 0.3s both; }
+    #pv-order-btn { animation: fadeUp 0.5s ease 0.35s both; }
 
     /* Notification toast */
     #toast {
@@ -1651,7 +1695,8 @@
     <div id="pv-img-placeholder" class="post-img-placeholder" style="border-radius:16px;margin-bottom:28px;display:none;font-size:4rem;">🎨</div>
     <div class="post-view-cat"><span id="pv-cat" class="post-cat"></span></div>
     <h1 class="post-view-title" id="pv-title"></h1>
-    <p class="post-view-desc" id="pv-desc"></p>
+    <p class="post-view-desc collapsed" id="pv-desc"></p>
+    <button id="pv-readmore-btn" class="readmore-btn" onclick="toggleReadMore()" style="display:none;">Read More ▼</button>
     <div class="post-view-price gold-text" id="pv-price"></div>
     <a id="pv-order-btn" href="#" target="_blank" class="btn-gold" style="display:inline-block;">Order Now 🛒</a>
   </div>
@@ -2173,7 +2218,14 @@ function openPostView(id) {
 function showPostView(post) {
   document.getElementById('pv-title').textContent = post.title || '';
   document.getElementById('pv-cat').textContent = post.category || '';
-  document.getElementById('pv-desc').textContent = post.description || '';
+  
+  const descEl = document.getElementById('pv-desc');
+  const rmBtn = document.getElementById('pv-readmore-btn');
+  descEl.textContent = post.description || '';
+  descEl.classList.add('collapsed');
+  rmBtn.style.display = 'none';
+  rmBtn.textContent = 'Read More ▼';
+
   document.getElementById('pv-price').textContent = formatPrice(post.price);
 
   const img = document.getElementById('pv-img');
@@ -2200,6 +2252,25 @@ function showPostView(post) {
   document.getElementById('post-view').classList.add('open');
   document.title = post.title + ' – Classic Creative Co';
   window.scrollTo(0,0);
+
+  // Check if description exceeds 7 lines
+  setTimeout(() => {
+    if (descEl.scrollHeight > descEl.clientHeight + 4) {
+      rmBtn.style.display = 'inline-flex';
+    }
+  }, 50);
+}
+
+function toggleReadMore() {
+  const descEl = document.getElementById('pv-desc');
+  const rmBtn = document.getElementById('pv-readmore-btn');
+  if (descEl.classList.contains('collapsed')) {
+    descEl.classList.remove('collapsed');
+    rmBtn.textContent = 'Show Less ▲';
+  } else {
+    descEl.classList.add('collapsed');
+    rmBtn.textContent = 'Read More ▼';
+  }
 }
 
 function closePostView() {
@@ -2413,5 +2484,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10f9abc6c49b77e',t:'MTc4MjM0NDcwOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
