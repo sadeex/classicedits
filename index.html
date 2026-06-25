@@ -610,7 +610,6 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0.18;
-      animation: softFloat 4s ease-in-out infinite;
     }
     @media(max-width: 960px) {
       .product-human-bg {
@@ -626,7 +625,6 @@
         left: auto !important;
         right: auto !important;
         opacity: 0.95 !important;
-        animation: gentleFloatMobile 4.5s ease-in-out infinite !important;
       }
       .product-human-bg svg {
         width: 100% !important;
@@ -638,6 +636,15 @@
     @media(max-width: 768px) {
       [data-theme="dark"] .product-human-bg { opacity: 0.15 !important; }
     }
+    
+    /* Disable animations in product view background */
+    .product-human-bg .head-group,
+    .product-human-bg .arm-left,
+    .product-human-bg .arm-right,
+    .product-human-bg .float-icon,
+    .product-human-bg .monitor-screen {
+      animation: none !important;
+    }
 
     #post-view {
       display: none; position: fixed; inset: 0; z-index: 8888;
@@ -645,7 +652,6 @@
     }
     #post-view.open { 
       display: block; 
-      animation: modalSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     @keyframes modalSlideUp {
       from { opacity: 0; transform: translateY(30px); }
@@ -668,15 +674,13 @@
     .post-view-img { 
       width: 100%; max-height: 420px; object-fit: cover; border-radius: 18px; margin-bottom: 28px;
       box-shadow: 0 16px 40px rgba(10,37,64,0.12);
-      animation: fadeUp 0.5s ease both;
     }
-    .post-view-cat { margin-bottom: 12px; animation: fadeUp 0.5s ease 0.1s both; }
-    .post-view-title { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 800; margin-bottom: 14px; animation: fadeUp 0.5s ease 0.15s both; }
+    .post-view-cat { margin-bottom: 12px; }
+    .post-view-title { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 800; margin-bottom: 14px; }
     
     /* Description with 7-line clamp */
     .post-view-desc { 
       color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 12px; white-space: pre-wrap; word-break: break-word;
-      animation: fadeUp 0.5s ease 0.2s both;
     }
     .post-view-desc.collapsed {
       display: -webkit-box;
@@ -688,14 +692,13 @@
       background: transparent; border: none; color: var(--blue-light); font-weight: 700; font-size: 0.9rem;
       cursor: pointer; padding: 4px 0; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px;
       transition: color 0.2s ease, transform 0.2s ease;
-      animation: fadeUp 0.5s ease 0.25s both;
     }
     .readmore-btn:hover { color: var(--blue); transform: translateX(3px); }
     [data-theme="dark"] .readmore-btn { color: #7CB7FF; }
     [data-theme="dark"] .readmore-btn:hover { color: #A7D0FF; }
 
-    .post-view-price { font-size: 1.5rem; font-weight: 800; margin-bottom: 28px; animation: fadeUp 0.5s ease 0.3s both; }
-    #pv-order-btn { animation: fadeUp 0.5s ease 0.35s both; }
+    .post-view-price { font-size: 1.5rem; font-weight: 800; margin-bottom: 28px; }
+    #pv-order-btn { }
 
     /* Notification toast */
     #toast {
@@ -2401,15 +2404,18 @@ function renderPosts(posts) {
 // ============================================================
 // SINGLE PRODUCT VIEW
 // ============================================================
+let homeScrollPos = 0;
 function openPostView(id) {
   const post = allPosts.find(p => p.id === id);
   if(!post) return;
+  homeScrollPos = window.scrollY;
   const newUrl = window.location.pathname + '?post=' + id;
   history.pushState({ postId: id }, post.title, newUrl);
   showPostView(post);
 }
 
 function showPostView(post) {
+  document.getElementById('main-site').style.display = 'none';
   document.getElementById('pv-title').textContent = post.title || '';
   document.getElementById('pv-cat').textContent = post.category || '';
   
@@ -2468,6 +2474,8 @@ function toggleReadMore() {
 }
 
 function closePostView() {
+  document.getElementById('main-site').style.display = 'block';
+  window.scrollTo(0, homeScrollPos);
   document.getElementById('post-view').classList.remove('open');
   document.title = 'Classic Creative Co – Graphic & Web Design';
   if(window.location.search) history.pushState({}, document.title, window.location.pathname);
@@ -2484,6 +2492,8 @@ window.onpopstate = function(e) {
     const post = allPosts.find(p => p.id === e.state.postId);
     if(post) showPostView(post);
   } else {
+    document.getElementById('main-site').style.display = 'block';
+    window.scrollTo(0, homeScrollPos);
     document.getElementById('post-view').classList.remove('open');
   }
 };
@@ -2493,7 +2503,10 @@ function checkDirectPostUrl() {
   const postId = params.get('post');
   if(postId) {
     const post = allPosts.find(p => p.id === postId);
-    if(post) showPostView(post);
+    if(post) {
+      homeScrollPos = window.scrollY;
+      showPostView(post);
+    }
   }
 }
 
