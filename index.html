@@ -534,6 +534,12 @@
       border-radius: 20px; padding: 36px; width: 100%; max-width: 680px;
       max-height: 90vh; overflow-y: auto; position: relative;
     }
+    .button-row {
+      display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+    }
+    .btn-remove-row {
+      background: #fee2e2; color: #dc2626; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;
+    }
     .admin-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; text-align: center; }
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
@@ -1765,7 +1771,7 @@
     <p class="post-view-desc collapsed" id="pv-desc"></p>
     <button id="pv-readmore-btn" class="readmore-btn" onclick="toggleReadMore()" style="display:none;">Read More ▼</button>
     <div class="post-view-price gold-text" id="pv-price"></div>
-    <a id="pv-order-btn" href="#" target="_blank" class="btn-gold" style="display:inline-block;">Order Now 🛒</a>
+    <div id="pv-buttons-container"></div>
   </div>
 </div>
 
@@ -1822,13 +1828,11 @@
         <div style="font-size:0.75rem;margin-top:5px;color:#6B7A92;">You can type numbers or custom text.</div>
       </div>
       <div class="form-group">
-        <label class="form-label">Order Link (WhatsApp / Email / URL)</label>
-        <input type="text" class="form-input" id="p-order-link" placeholder="https://wa.me/94xxxxxxxxx or mailto:..."/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Custom Button Text</label>
-        <input type="text" class="form-input" id="p-button-text" placeholder="e.g. Order Now, Buy Now, Download Now" maxlength="28"/>
-        <div style="font-size:0.75rem;margin-top:5px;color:#6B7A92;">This replaces the public product button text.</div>
+        <label class="form-label">Buttons (Labels & Links) *</label>
+        <div id="p-buttons-container">
+          <!-- Button rows will be added here -->
+        </div>
+        <button type="button" class="btn-gold" style="background:transparent; border:1px dashed var(--blue-light); color:var(--blue-light); width:100%; margin-top:8px; padding:8px;" onclick="addButtonRow()">+ Add Another Button</button>
       </div>
       <div class="form-group">
         <label class="form-label">Product Image</label>
@@ -1981,6 +1985,18 @@ function previewFile(input) {
   reader.readAsDataURL(file);
 }
 
+function addButtonRow(label = '', link = '') {
+  const container = document.getElementById('p-buttons-container');
+  const div = document.createElement('div');
+  div.className = 'button-row';
+  div.innerHTML = `
+    <input type="text" class="form-input p-btn-label" placeholder="Label (e.g. Order Now)" value="${escHtml(label)}" style="flex: 1;"/>
+    <input type="text" class="form-input p-btn-link" placeholder="Link (URL/WhatsApp)" value="${escHtml(link)}" style="flex: 2;"/>
+    <button type="button" class="btn-remove-row" onclick="this.parentElement.remove()" title="Remove">✕</button>
+  `;
+  container.appendChild(div);
+}
+
 async function uploadFileToStorage(file) {
   return new Promise((resolve, reject) => {
     if(!auth.currentUser) {
@@ -2016,10 +2032,21 @@ async function submitPost() {
   const cat = document.getElementById('p-cat').value.trim();
   const desc = document.getElementById('p-desc').value.trim();
   const priceRaw = document.getElementById('p-price').value.trim();
-  const orderLink = document.getElementById('p-order-link').value.trim();
-  const buttonText = document.getElementById('p-button-text').value.trim();
+  
+  // Collect buttons
+  const buttons = [];
+  const labelInputs = document.querySelectorAll('.p-btn-label');
+  const linkInputs = document.querySelectorAll('.p-btn-link');
+  labelInputs.forEach((input, i) => {
+    const lbl = input.value.trim();
+    const lnk = linkInputs[i].value.trim();
+    if(lbl && lnk) {
+      buttons.push({ label: lbl, link: lnk });
+    }
+  });
 
   if(!title || !cat) { showToast('Title and Category are required!', 'error'); return; }
+  if(buttons.length === 0) { showToast('At least one button (Label & Link) is required!', 'error'); return; }
 
   let imageUrl = '';
   if(currentImgTab === 'url') {
@@ -2042,8 +2069,7 @@ async function submitPost() {
         category: cat,
         description: desc,
         price,
-        orderLink,
-        buttonText,
+        buttons,
         imageUrl: imageUrl || oldPost.imageUrl || '',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -2055,8 +2081,7 @@ async function submitPost() {
         category: cat,
         description: desc,
         price,
-        orderLink,
-        buttonText,
+        buttons,
         imageUrl,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         createdBy: auth.currentUser.email || auth.currentUser.uid
@@ -2077,10 +2102,12 @@ async function submitPost() {
 }
 
 function resetPostForm() {
-  ['p-title','p-cat','p-desc','p-price','p-order-link','p-button-text','p-img-url'].forEach(id => {
+  ['p-title','p-cat','p-desc','p-price','p-img-url'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.value = '';
   });
+  document.getElementById('p-buttons-container').innerHTML = '';
+  addButtonRow(); // Add one empty row by default
   const fileInput = document.getElementById('p-img-file');
   if(fileInput) fileInput.value = '';
   document.getElementById('file-preview').innerHTML = '';
@@ -2328,7 +2355,17 @@ function renderPosts(posts) {
   observeReveals();
 }
 
-
+function getButtonsHtml(post, isProductView = false) {
+  let btns = post.buttons || [];
+  if (btns.length === 0) {
+    // Fallback for old data
+    btns = [{ label: post.buttonText || 'Take a look 👀', link: post.orderLink || '#' }];
+  }
+  
+  return btns.map(b => `
+    <a href="${escHtml(b.link)}" target="_blank" class="btn-gold" style="display:inline-block; margin-right:8px; margin-bottom:8px;">${escHtml(b.label)}</a>
+  `).join('');
+}
 
 // ============================================================
 // SINGLE PRODUCT VIEW
@@ -2369,14 +2406,8 @@ function showPostView(post) {
     placeholder.style.display = 'flex';
   }
 
-  const orderBtn = document.getElementById('pv-order-btn');
-  orderBtn.textContent = post.buttonText || 'Take a look 👀';
-  if(post.orderLink) {
-    orderBtn.href = post.orderLink;
-  } else {
-    orderBtn.href = 'mailto:classiceditsco@gmail.com?subject=Order: ' + encodeURIComponent(post.title);
-  }
-  orderBtn.style.display = 'inline-block';
+  const buttonsContainer = document.getElementById('pv-buttons-container');
+  buttonsContainer.innerHTML = getButtonsHtml(post, true);
 
   document.getElementById('post-view').classList.add('open');
   document.title = post.title + ' – Classic Creative Co';
@@ -2620,5 +2651,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a110048e083e2842',t:'MTc4MjM0OTA0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a116e73d898724d1',t:'MTc4MjQyMTI0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a110048e083e2842',t:'MTc4MjM0OTA0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a117039c1bc92842',t:'MTc4MjQyMjQwNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
