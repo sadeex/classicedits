@@ -96,14 +96,83 @@
     @media(max-width:768px){
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      #hero { padding: 100px 14px 30px; }
+      
+      /* HERO STACK LAYOUT FOR MOBILE */
+      #hero { 
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        padding: 90px 16px 40px !important; 
+        min-height: 100vh !important;
+        height: auto !important;
+      }
       .hero-title { font-size: 2.2rem; }
       .hero-sub { font-size: 0.95rem; margin-bottom: 20px; }
-      .hero-stats { gap: 16px; margin-top: 32px; }
+      .hero-stats { gap: 16px; margin-top: 24px; }
       #services, #portfolio, #about, #contact, #trust, #live-editor { padding: 50px 14px; }
       .section-title { font-size: 1.6rem; }
       .services-grid, .contact-cards, .trust-grid { gap: 14px; }
       
+      /* FULLY VISIBLE HERO ILLUSTRATION (NO OVERLAP, NOT CUT IN HALF) */
+      .hero-human-bg {
+        position: relative !important;
+        display: block !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        margin: 10px auto 24px auto !important;
+        width: clamp(260px, 86vw, 380px) !important;
+        aspect-ratio: 6/5 !important;
+        opacity: 1 !important;
+        z-index: 1 !important;
+        order: 1 !important;
+      }
+      #hero > div[style] {
+        order: 2 !important;
+        width: 100% !important;
+      }
+
+      /* TRUST STRIP STACK ON MOBILE */
+      .trust-strip {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 28px auto 0 !important;
+        box-sizing: border-box !important;
+      }
+      .trust-pill {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        justify-content: flex-start !important;
+      }
+
+      /* DESIGNER STAGE FIT ON MOBILE */
+      .designer-stage-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 30px auto 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        perspective: none !important;
+      }
+      .designer-stage {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        transform: none !important;
+      }
+
+      /* LIVE EDITOR FIT ON MOBILE */
+      .editor-showcase, .editor-window, .editor-canvas {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
       /* Daraz-Style Mobile Grid: exactly 2 columns, compact cards */
       .posts-grid { 
         display: grid !important;
@@ -149,15 +218,15 @@
       animation: fadeUp 1.2s ease-out 0.5s both;
       transition: transform 0.1s ease-out;
     }
-    @media(max-width: 960px) {
+    @media(max-width: 960px) and (min-width: 769px) {
       .hero-human-bg {
-        top: 105px !important;
-        bottom: auto !important;
+        position: absolute;
+        bottom: 0;
         right: 0;
         left: 0;
         margin: 0 auto;
-        width: clamp(280px, 88vw, 460px) !important;
-        opacity: 0.32;
+        width: clamp(280px, 60vw, 460px);
+        opacity: 0.25;
       }
     }
     .desk-base { fill: var(--light); stroke: var(--light2); stroke-width: 4; }
@@ -487,13 +556,15 @@
     }
     @media(max-width: 768px) {
       .product-human-bg {
-        width: clamp(280px, 88vw, 440px) !important;
-        right: 0 !important;
-        left: 0 !important;
-        margin: 0 auto !important;
-        top: 110px !important;
+        position: relative !important;
+        display: block !important;
+        width: clamp(220px, 75vw, 340px) !important;
+        margin: 15px auto 5px auto !important;
+        top: auto !important;
         bottom: auto !important;
-        opacity: 0.22 !important;
+        left: auto !important;
+        right: auto !important;
+        opacity: 0.95 !important;
       }
     }
     [data-theme="dark"] .product-human-bg { opacity: 0.12; }
@@ -2484,5 +2555,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10f9abc6c49b77e',t:'MTc4MjM0NDcwOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10faff34e362842',t:'MTc4MjM0NTU3Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
