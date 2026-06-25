@@ -355,25 +355,49 @@
     /* PORTFOLIO / POSTS */
     #portfolio { padding: 80px 20px; background: var(--white); }
     .search-container {
-      max-width: 480px; margin: 0 auto 32px auto;
+      max-width: 520px; margin: 0 auto 36px auto;
       position: relative;
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .search-container:focus-within {
+      transform: translateY(-3px) scale(1.02);
     }
     .search-input {
-      width: 100%; padding: 14px 20px 14px 44px;
-      border-radius: 50px; border: 1px solid rgba(10,37,64,0.15);
-      background: var(--light); color: var(--text);
-      font-size: 0.95rem; transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(10,37,64,0.03);
+      width: 100%; padding: 16px 44px 16px 48px;
+      border-radius: 999px; border: 2px solid rgba(30,77,140,0.22);
+      background: var(--surface); color: var(--text);
+      font-size: 0.98rem; font-weight: 500;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 25px rgba(10,37,64,0.08);
     }
+    .search-input::-webkit-search-decoration,
+    .search-input::-webkit-search-cancel-button,
+    .search-input::-webkit-search-results-button,
+    .search-input::-webkit-search-results-decoration { display: none; }
     .search-input:focus {
-      outline: none; border-color: var(--blue-light);
-      box-shadow: 0 6px 20px rgba(10,37,64,0.1); background: var(--white);
+      outline: none; border-color: var(--blue-lighter);
+      background: var(--surface);
+      box-shadow: 0 0 0 5px rgba(59,111,196,0.18), 0 16px 40px rgba(10,37,64,0.16);
     }
     .search-icon {
-      position: absolute; left: 16px; top: 50%;
-      transform: translateY(-50%); color: var(--muted);
-      font-size: 1.1rem; pointer-events: none;
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%); color: var(--blue-light);
+      font-size: 1.25rem; pointer-events: none;
+      animation: softFloat 3s ease-in-out infinite;
     }
+    .search-clear {
+      position: absolute; right: 16px; top: 50%;
+      transform: translateY(-50%) scale(0);
+      background: rgba(10,37,64,0.12); color: var(--text);
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 800;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease;
+    }
+    .search-clear.show { transform: translateY(-50%) scale(1); }
+    .search-clear:hover { background: rgba(10,37,64,0.22); }
+    [data-theme="dark"] .search-clear { background: rgba(138,180,255,0.18); color: #fff; }
+    [data-theme="dark"] .search-clear:hover { background: rgba(138,180,255,0.32); }
     .filter-bar {
       display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px;
     }
@@ -1588,7 +1612,8 @@
     
     <div class="search-container reveal">
       <span class="search-icon">🔍</span>
-      <input type="text" id="product-search" class="search-input" placeholder="Search for products..." oninput="handleSearch(this.value)">
+      <input type="search" id="product-search" name="product_search_query_rnd" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="search-input" placeholder="Search products (e.g. web, graphic, crypto)..." oninput="handleSearch(this.value)">
+      <button type="button" id="search-clear-btn" class="search-clear" onclick="clearSearch()" title="Clear search">✕</button>
     </div>
 
     <div class="filter-bar" id="filter-bar">
@@ -2226,9 +2251,69 @@ function buildFilterBar(cats) {
 
 let currentSearchQuery = '';
 
+function levenshtein(a, b) {
+  if (a === b) return 0;
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+function isFuzzyMatch(targetText, query) {
+  if (!targetText || !query) return false;
+  const text = targetText.toLowerCase();
+  const q = query.toLowerCase().trim();
+  if (!q) return true;
+
+  if (text.includes(q)) return true;
+
+  const queryWords = q.split(/\s+/).filter(Boolean);
+  const textWords = text.replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+
+  return queryWords.every(qWord => {
+    if (text.includes(qWord)) return true;
+    if (qWord.length <= 2) return false;
+    
+    const maxAllowedEdits = qWord.length <= 4 ? 1 : 2;
+    return textWords.some(tWord => {
+      if (Math.abs(tWord.length - qWord.length) > maxAllowedEdits) return false;
+      return levenshtein(qWord, tWord) <= maxAllowedEdits;
+    });
+  });
+}
+
 function handleSearch(query) {
-  currentSearchQuery = query.toLowerCase().trim();
+  currentSearchQuery = query.trim();
+  const clearBtn = document.getElementById('search-clear-btn');
+  if (clearBtn) {
+    if (currentSearchQuery.length > 0) clearBtn.classList.add('show');
+    else clearBtn.classList.remove('show');
+  }
   applyCombinedFilters();
+}
+
+function clearSearch() {
+  const input = document.getElementById('product-search');
+  if (input) {
+    input.value = '';
+    handleSearch('');
+    input.focus();
+  }
 }
 
 function filterPosts(cat, btn) {
@@ -2246,11 +2331,10 @@ function applyCombinedFilters() {
     filtered = filtered.filter(p => p.category === activeFilter);
   }
   if(currentSearchQuery) {
-    filtered = filtered.filter(p => 
-      (p.title && p.title.toLowerCase().includes(currentSearchQuery)) || 
-      (p.description && p.description.toLowerCase().includes(currentSearchQuery)) ||
-      (p.category && p.category.toLowerCase().includes(currentSearchQuery))
-    );
+    filtered = filtered.filter(p => {
+      const combinedText = `${p.title || ''} ${p.category || ''} ${p.description || ''}`;
+      return isFuzzyMatch(combinedText, currentSearchQuery);
+    });
   }
   renderPosts(filtered);
 }
@@ -2568,5 +2652,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10fb932d9e92842',t:'MTc4MjM0NTk1Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10fc2326edb5138',t:'MTc4MjM0NjMyNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
