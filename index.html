@@ -1416,7 +1416,105 @@
       50%{ transform:translate(-12px,10px); width:42%; height:35%; }
     }
 
+    /* ===== AD UNITS - Classic Creative Co ===== */
+    .ad-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 12px;
+      background: var(--light);
+      border-top: 1px solid rgba(10,37,64,0.07);
+      border-bottom: 1px solid rgba(10,37,64,0.07);
+    }
+    .ad-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      opacity: .85;
+    }
+    .ad-slot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .ad-slot iframe {
+      max-width: 100%;
+      display: block;
+    }
+    /* Top leaderboard */
+    .ad-leaderboard {
+      padding-top: 90px; /* clear fixed navbar */
+      background: #F4F7FB;
+    }
+    /* In-content ad */
+    .ad-incontent {
+      padding: 28px 12px;
+      background: #fff;
+    }
+    /* Mobile sticky 320x50 */
+    @media(max-width: 768px) {
+      .ad-incontent.ad-mobile-sticky {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2000;
+        padding: 8px 8px 10px;
+        background: rgba(255,255,255,0.98);
+        border-top: 1px solid rgba(10,37,64,0.12);
+        box-shadow: 0 -8px 24px rgba(10,37,64,0.10);
+        backdrop-filter: blur(8px);
+      }
+      .ad-incontent.ad-mobile-sticky .ad-label {
+        margin-bottom: 4px;
+      }
+      body.ad-sticky-active {
+        padding-bottom: 78px;
+      }
+      .ad-close {
+        position: absolute;
+        top: 4px;
+        right: 10px;
+        background: #e8eef6;
+        border: none;
+        color: #4b5c76;
+        font-size: 11px;
+        line-height: 1;
+        padding: 4px 8px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      .ad-close:hover { background: #d9e3f0; }
+    }
+    /* Hide 468x60 on very small screens to avoid overflow */
+    @media(max-width: 500px) {
+      .ad-slot-468 {
+        transform: scale(0.66);
+        transform-origin: center top;
+        height: 40px;
+        margin-bottom: -20px;
+      }
+    }
+    @media(max-width: 360px) {
+      .ad-slot-468 { display: none; }
+      .ad-leaderboard .ad-fallback-text {
+        display: block !important;
+        font-size: 12px;
+        color: var(--muted);
+      }
+    }
+
   </style>
+
+<!-- Adsterra - Site-wide / Social Bar -->
+<script src="https://hecticwelcomingassociation.com/e7/e2/85/e7e28527001f8059185e1c72c999e068.js"></script>
 </head>
 <body>
 
@@ -1454,6 +1552,23 @@
 <!-- MAIN SITE -->
 <div id="main-site">
 
+  <!-- TOP LEADERBOARD AD - 468x60 -->
+  <div class="ad-container ad-leaderboard" role="complementary" aria-label="Advertisement">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-slot ad-slot-468">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '8befd6e02eb21941f51d69e286945f1d',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="https://hecticwelcomingassociation.com/8befd6e02eb21941f51d69e286945f1d/invoke.js"></script>
+    </div>
+    <span class="ad-fallback-text" style="display:none;">Classic Creative Co – Sponsor</span>
+  </div>
 
   <!-- HERO -->
   <section id="hero">
@@ -1636,7 +1751,23 @@
     </div>
   </section>
 
-
+  <!-- IN-CONTENT AD - 320x50 | Sticky on mobile -->
+  <div class="ad-container ad-incontent ad-mobile-sticky" id="ad-mid" role="complementary" aria-label="Advertisement">
+    <button class="ad-close" onclick="closeMidAd()" aria-label="Close ad" style="display:none;">✕ Close</button>
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-slot ad-slot-320">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : 'fcb968068265c87888a9acf937976cc7',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="https://hecticwelcomingassociation.com/fcb968068265c87888a9acf937976cc7/invoke.js"></script>
+    </div>
+  </div>
 
   <!-- SERVICES -->
   <section id="services">
@@ -2651,5 +2782,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0d9c4a09a3824d1',t:'MTc4MTc4MDE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a110048e083e2842',t:'MTc4MjM0OTA0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a117039c1bc92842',t:'MTc4MjQyMjQwNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a110048e083e2842',t:'MTc4MjM0OTA0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a117039c1bc92842',t:'MTc4MjQyMjQwNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><!-- Ad Units Helper -->
+<script>
+  // Mid-content ad: mobile sticky behavior
+  function closeMidAd(){
+    var ad = document.getElementById('ad-mid');
+    if(ad){ ad.style.display='none'; document.body.classList.remove('ad-sticky-active'); }
+    try{ localStorage.setItem('ccc_ad_closed', Date.now()); }catch(e){}
+  }
+  function initAds(){
+    var ad = document.getElementById('ad-mid');
+    var closeBtn = ad ? ad.querySelector('.ad-close') : null;
+    var isMobile = window.innerWidth <= 768;
+    if(ad && isMobile){
+      document.body.classList.add('ad-sticky-active');
+      if(closeBtn) closeBtn.style.display = 'block';
+    }
+    // respect recent close (hide for 30 min)
+    try{
+      var closed = localStorage.getItem('ccc_ad_closed');
+      if(closed && Date.now() - parseInt(closed,10) < 30*60*1000){
+        if(ad) ad.style.display='none';
+        document.body.classList.remove('ad-sticky-active');
+      }
+    }catch(e){}
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initAds);
+  } else {
+    initAds();
+  }
+  window.addEventListener('resize', function(){
+    var ad = document.getElementById('ad-mid');
+    var closeBtn = ad ? ad.querySelector('.ad-close') : null;
+    if(window.innerWidth <= 768 && ad && ad.style.display !== 'none'){
+      document.body.classList.add('ad-sticky-active');
+      if(closeBtn) closeBtn.style.display = 'block';
+    } else {
+      document.body.classList.remove('ad-sticky-active');
+      if(closeBtn) closeBtn.style.display = 'none';
+    }
+  });
+</script>
+</body>
 </html>
